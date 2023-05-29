@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -6,6 +7,17 @@ import contextily as ctx
 import time
 from datetime import datetime
 from pyproj import CRS
+
+# Objective of version 3 :
+# speed it up (there are probably redundancies)
+# investigate cartopy, seems like a better route for plotting actually
+# if anything, this really probably should be a heatmap, and not a scatter plot.
+# maybe it's not so stupid to be able to set a t_min and t_max. that way if animation is interrupted, we can start from later on?
+# it's kind of annoying actually that the blue isn't all that impressive because if a latitude and longitude isn't "exactly right" well it won't be summed...
+
+# a numpy approach of a mesh grid could be fine, so that points would be accumulated in areas
+# and also computations arent too long. apparently scipy has good content for sparse matrices.
+# MIGRATE TO GITHUB BECAUSE ACTUALLY MANUAL VERSIONING IS A MESS IF I WANT TO IMPLEMENT AN IDEA TO FUNCTIONAL OR TEST
 
 # Check if "output" folder exists, and create one if it doesn't
 output_folder = "output"
@@ -15,10 +27,11 @@ if not os.path.exists(output_folder):
 
 # Get the current date and time
 current_time = datetime.now()
-simulation_time = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+simulation_day = current_time.strftime("%Y-%m-%d")
+simulation_hour = current_time.strftime("%H-%M-%S")
 
 # Create a folder with the current date and time as its name
-simulation_folder = os.path.join(output_folder, simulation_time)
+simulation_folder = os.path.join(output_folder, simulation_day, simulation_hour)
 os.makedirs(simulation_folder)
 print("Created simulation folder:", simulation_folder)
 
@@ -55,6 +68,7 @@ groupedCO2 = gdf.groupby(['latitude', 'longitude'])['CO2'].sum()
 # Calculate the maximum CO2 pollution at a single point
 max_CO2 = groupedCO2.max()
 
+
 print(f"Longitudes x latitudes explored: {len(gdf['longitude'])} x  {len(gdf['latitude'])}")
 
 
@@ -77,7 +91,7 @@ else:
 
 # Step 5: Set up the figure and axes
 fsize = 20
-fig, ax = plt.subplots(figsize = (fsize,fsize))
+fig, ax = plt.subplots(figsize = (fsize, fsize))
 # Explain exactly what fig and ax are ! The figure and the colorbar, subplots side to side. This is where we control the size.
 ax.set_aspect('equal')
 ax.set_axis_off()
@@ -93,35 +107,51 @@ ax.set_ylim(min_lat, max_lat)
 
 
 
-
+print("Initializing colorbar...")
 # Initialize the colorbar with the maximum CO2 value
 colormap = 'plasma'
 scatter_size = 1
-sc = ax.scatter([], [], c=[], cmap=colormap, s=scatter_size, vmin=0, vmax=max_CO2)
+sc = ax.scatter([], [], c=[], cmap=colormap, s=5, vmin=0, vmax=max_CO2)
 cbar = plt.colorbar(sc, ax=ax, label=f'CO2 Pollution ({unit})', shrink=0.5)
-#shrink = 0.6 argument previously
 
-# Step 6: Loop over each timestep and update the CO2 values
-aggregated_data = gdf.groupby(['longitude', 'latitude'])['CO2'].cumsum()
+# Uh oh, initialization is more complicated than expected!
+'''To initialize "accumulated_values", we need all latitude and longitude where there was ever pollution. That way, we can create a fixed-length structure that will work throughout the whole simulation. So, we need to initialize a geodataframe using all longitudes and latitudes. It will store values of CO2 over time, and be initialized at zero. The goal is that, in the for loop, we can add pollution values at each timestep without any problems.'''
+print("Initializing cumulative GeoDataFrame...")
+# Get unique pairs of latitude and longitude
+unique_locations = gdf[['latitude', 'longitude']].drop_duplicates()
 
-# Loop over each timestep and update the scatter plot
-for timestep in df['timestep'].unique():
-    start_time = time.time()  # Start measuring the time
-    #idk what these do, try uncommenting to see if it really changes stuff?
+# Create an empty GeoDataFrame with unique locations
+CO2_df = pd.DataFrame(unique_locations, columns=['latitude', 'longitude'])
+CO2_geometry = gpd.points_from_xy(CO2_df['longitude'], CO2_df['latitude'])
+CO2_gdf = gpd.GeoDataFrame(CO2_df, geometry=CO2_geometry)
 
-    # Filter data for the current timestep and aggregate CO2 values
-    timestep_data = gdf[gdf['timestep'] <= timestep] #THIS IS WHY ITS TAKING AGES
-    aggregated_values = aggregated_data[timestep_data.index]
+# Add a column 'CO2' filled with zeroes
+CO2_gdf['CO2'] = 0
 
+# Iterate over each timestep and update CO2 values
+for timestep in gdf['timestep'].sort_values().unique():
+    start_time = time.time()
+    # Filter rows for the current timestep
+    timestep_data = gdf[gdf['timestep'] == timestep]
+
+    # Update CO2 values in the result DataFrame
+    for index, row in timestep_data.iterrows():
+        #Perhaps for loops are still too slow, and some native GeoPandas functions are better.
+        location_match = (CO2_gdf['latitude'] == row['latitude']) & (CO2_gdf['longitude'] == row['longitude'])
+        CO2_gdf.loc[location_match, 'CO2'] += row['CO2']
+    CO2_values = CO2_gdf[timestep_data.index]
+
+# Update the scatter plot
     sc = ax.scatter(
-        timestep_data.geometry.x,
-        timestep_data.geometry.y,
-        c=aggregated_values,
+        CO2_geometry.x,
+        CO2_geometry.y,
+        c=CO2_values,
         cmap=colormap,
         s=scatter_size,
         vmin=0,
         vmax=max_CO2,
     )
+
     # Add the basemap with the calculated zoom level
     # ctx.add_basemap(ax, crs=gdf.crs, source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.5, zoom=zoom_level)
     ctx.add_basemap(ax, crs=gdf.crs, source=ctx.providers.OpenStreetMap.Mapnik)
@@ -140,7 +170,7 @@ for timestep in df['timestep'].unique():
     elapsed_time = end_time - start_time
 
     # Print the elapsed time in seconds
-    print(f"\n-= Snapshot {timestep} =-")
+    print(f"-= Snapshot {timestep} =-")
     print(f"Generation time: {elapsed_time:.2f} seconds")
 
     # Get the size of the file in bytes
@@ -155,7 +185,7 @@ for timestep in df['timestep'].unique():
         size_str = f"{file_size / (1024 ** 2):.2f} MB"
 
     # Print the file size
-    print(f"Dataframe size: {len(aggregated_values)}")
+    print(f"Dataframe size: {len(CO2_gdf)}")
     print(f"File size: {size_str}")
 
 # Step 7: Display a message indicating the snapshots have been saved
