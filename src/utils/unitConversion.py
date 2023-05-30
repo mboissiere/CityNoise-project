@@ -54,6 +54,8 @@ def convertDataFrame(dataframe:DataFrame, key:str, max_value:float, units_list:l
     :param dataframe: The dataframe containing the data we would like to convert.
     :param key: The name of the column of interest, such that dataframe[key] calls it.
     :param max_value: A maximum value that will bound our visualization of the data.
+    :param units_list: A list of strings containing names of units in the system of interest.
+    :param base: The base of the unit conversion, such that in the units list, ratio between neighbors is the base.
     :return: Converted maximum value and its most suited unit for display
     :rtype tuple(float, str):
     """

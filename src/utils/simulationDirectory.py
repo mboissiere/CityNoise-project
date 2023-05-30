@@ -4,7 +4,8 @@ This module configures the output folder of a simulation, and contains helper fu
 import os
 import matplotlib.pyplot as plt
 from datetime import datetime
-from src.constants.simulationOutputConstants import *
+from src.config.projectVariables import snapshot_name
+from src.constants.simulationDirectoryConstants import *
 
 
 def createSimulationFolder():
@@ -40,5 +41,5 @@ def saveSnapshot(simulation_folder_path:str, timestep:int):
     :param timestep: Timestep currently represented by the snapshot being saved.
     :return: None
     """
-    filename = f'{simulation_folder_path}/{snapshot_name}_{timestep}.{file_format}'
-    plt.savefig(fname=filename, dpi=dpi, bbox_inches=BBOX_SETTINGS)
+    filename = f'{simulation_folder_path}/{snapshot_name}_{timestep}.{FILE_FORMAT}'
+    plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)

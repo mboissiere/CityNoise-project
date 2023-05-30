@@ -1,0 +1,16 @@
+"""
+This file gathers all project variables (written in lower_snake_case) that play a role in the simulation configuration.
+"""
+from src.constants.manipulateGeoDataConstants import *
+
+# Can be made to change depending on neighborhood studied, but we're not that far in the code yet, so constant for now.
+snapshot_name = "sodermalm"
+
+# Names of columns that will be imported and studied. Timestep, longitude and latitude are already imported by default.
+input_columns = ['CO2']
+
+# EPSG identifier of the CRS used in the creation of the input CSV
+input_CRS = EPSG_WORLD_GEODESIC_SYSTEM
+
+# EPSG identifier of the output CRS desired in case of reprojection
+output_CRS = EPSG_PSEUDO_MERCATOR

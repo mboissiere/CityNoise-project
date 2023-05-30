@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 import contextily as ctx
 import time
 from datetime import datetime
-from pyproj import CRS
-from src.utils.simulationOutput import *
+from src.config.projectVariables import *
+from src.utils.manipulateData import *
+from src.utils.manipulateGeoData import *
+from src.utils.simulationDirectory import *
 from src.utils.unitConversion import *
 
 # Objective of version 3 :
@@ -22,31 +24,16 @@ from src.utils.unitConversion import *
 # MIGRATE TO GITHUB BECAUSE ACTUALLY MANUAL VERSIONING IS A MESS IF I WANT TO IMPLEMENT AN IDEA TO FUNCTIONAL OR TEST
 
 # Set snapshot names - timesteps will be added automatically
-snapshot_name = 'sodermalm'
+
+df = importFromCSV(input_columns)
 print("Snapshots will be saved under the name:", snapshot_name)
 
-# Step 1: Read the CSV file into a Pandas DataFrame, filtering out rows with N/A timesteps
-# Note to self : explain Int64. int doesnt work, perhaps with 20000 etc, creats N/A
-df = pd.read_csv('traffic_data.csv',
-                    usecols=['timestep', 'longitude', 'latitude', 'CO2'],
-                    dtype={'timestep': 'Int64', 'longitude': float, 'latitude': float, 'CO2': float}).dropna()
+gdf = geoDataFrameFromDataFrame(df, input_CRS)
 
-# KNOWING ORIGINAL CRS OF THE DATA? SPECIFY IT IN THE IMPROT
-input_crs = CRS.from_epsg(4326)
-print(f"Data obtained from CRS: {input_crs.name}")
-#COMMENT WHAT THESE ARE EXACTLY
+print(f"Data obtained from CRS: {input_CRS.name}")
 
-# Specify the CRS to be projected. Here, EPSG:3847 means pseudo-Mercator, but it can be changed.
-#4814 is Stockholm
-output_crs = CRS.from_epsg(4814)
-print(f"Reprojecting to: {output_crs.name}")
-
-# Step 2: Create a GeoDataFrame from the DataFrame
-geometry = gpd.points_from_xy(df['longitude'], df['latitude'])
-gdf = gpd.GeoDataFrame(df, geometry=geometry, crs=input_crs)
-
-# Reproject
-gdf.to_crs(output_crs)
+reprojectEPSG(gdf, input_CRS, output_CRS)
+print(f"Reprojecting to: {output_CRS.name}")
 
 # Group data by latitude and longitude, and calculate the sum of CO2 values for each location
 groupedCO2 = gdf.groupby(['latitude', 'longitude'])['CO2'].sum()

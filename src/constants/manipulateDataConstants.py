@@ -1,0 +1,33 @@
+"""
+@author: Mattéo Boissière
+
+This file gathers constants (written in UPPER_SNAKE_CASE) to be called in the importing of an input CSV file.
+It is possible to modify them here, but in normal execution shouldn't need to happen too often.
+"""
+
+# Path from the main.py folder to the data folder, where (potentially multiple) CSVs can be found.
+PATH_TO_DATA = "../data"
+
+# Name of the import of interest.
+FILE_NAME_FROM_DATA = "traffic_data"
+
+# Name of the CSV column that holds timestep data.
+TIMESTEP_COLUMN = "timestep"
+
+# Type of the data in the timestep column. It is recommended to use Int64 to avoid errors at long timesteps.
+TIMESTEP_TYPE = 'Int64'
+
+# Name of the CSV column that holds longitude data.
+LONGITUDE_COLUMN = "longitude"
+
+# Type of the data in the longitude column.
+# Further code solidification could check that it is a correct Longitude instead of a float, but non-urgent for now.
+LONGITUDE_TYPE = float
+
+# Name of the CSV column that holds latitude data.
+LATITUDE_COLUMN = "latitude"
+
+# Type of the data in the latitude column.
+# Further code solidification could check that it is a correct Latitude instead of a float, but non-urgent for now.
+LATITUDE_TYPE = float
+# (Does it show that I had an object-oriented programming internship that was strict with signatures? lmao)
