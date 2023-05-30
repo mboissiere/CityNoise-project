@@ -19,22 +19,6 @@ from pyproj import CRS
 # and also computations arent too long. apparently scipy has good content for sparse matrices.
 # MIGRATE TO GITHUB BECAUSE ACTUALLY MANUAL VERSIONING IS A MESS IF I WANT TO IMPLEMENT AN IDEA TO FUNCTIONAL OR TEST
 
-# Check if "output" folder exists, and create one if it doesn't
-output_folder = "output"
-if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
-    print("Created 'output' folder.")
-
-# Get the current date and time
-current_time = datetime.now()
-simulation_day = current_time.strftime("%Y-%m-%d")
-simulation_hour = current_time.strftime("%H-%M-%S")
-
-# Create a folder with the current date and time as its name
-simulation_folder = os.path.join(output_folder, simulation_day, simulation_hour)
-os.makedirs(simulation_folder)
-print("Created simulation folder:", simulation_folder)
-
 # Set snapshot names - timesteps will be added automatically
 snapshot_name = 'sodermalm'
 print("Snapshots will be saved under the name:", snapshot_name)
@@ -161,10 +145,7 @@ for timestep in gdf['timestep'].sort_values().unique():
     # 16 zoom takes
     # Explain this funky alpha value
     #cbar.ax.set_ylabel(f'CO2 Pollution ({unit})')
-    file_format = "jpg"
-    # Explain advantages and disadvantages of png/jpg
-    filename = f'{simulation_folder}/{snapshot_name}_{timestep}.{file_format}'
-    plt.savefig(fname=filename, dpi=300, bbox_inches='tight')
+
     end_time = time.time()  # Stop measuring the time
     # Calculate the elapsed time
     elapsed_time = end_time - start_time
