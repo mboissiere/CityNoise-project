@@ -1,14 +1,10 @@
 """
 This module configures the output folder of a simulation, and contains helper functions for display if needed.
-
-Module-level functions:
-- createSimulationFolder
-- saveSnapshot
 """
 import os
 import matplotlib.pyplot as plt
 from datetime import datetime
-from src.constants.outputConstants import *
+from src.constants.simulationOutputConstants import *
 
 
 def createSimulationFolder():
@@ -16,7 +12,8 @@ def createSimulationFolder():
     Creates a folder in which to save screenshots from the simulation.
     Sorts it using date & time of simulation launch, as to not clog up workspace.
 
-    :return: simulation_folder_path, string of the path that can be used in printing if needed.
+    :return: The path of the folder where simulation files will be saved.
+    :rtype str:
     """
 
     # Check if "output" folder exists, and create one if it doesn't.
@@ -35,11 +32,12 @@ def createSimulationFolder():
     return simulation_folder_path
 
 
-def saveSnapshot(simulation_folder_path, timestep):
+def saveSnapshot(simulation_folder_path:str, timestep:int):
     """
+    Saves the current figure in pyplot as an image.
 
-    :param simulation_folder_path: path of the simulation folder where snapshots will be saved
-    :param timestep: timestep currently represented by the snapshot being saved
+    :param simulation_folder_path: Path of the simulation folder where snapshots will be saved.
+    :param timestep: Timestep currently represented by the snapshot being saved.
     :return: None
     """
     filename = f'{simulation_folder_path}/{snapshot_name}_{timestep}.{file_format}'

@@ -7,6 +7,8 @@ import contextily as ctx
 import time
 from datetime import datetime
 from pyproj import CRS
+from src.utils.simulationOutput import *
+from src.utils.unitConversion import *
 
 # Objective of version 3 :
 # speed it up (there are probably redundancies)
@@ -60,18 +62,7 @@ print(f"Longitudes x latitudes explored: {len(gdf['longitude'])} x  {len(gdf['la
 # Step 3: Calculate the bounding box coordinates
 min_lon, min_lat, max_lon, max_lat = gdf.total_bounds
 
-# Adjust the CO2 unit and colorbar label based on the maximum value
-# Determine the appropriate unit for the colorbar
-if max_CO2 >= 1000:
-    gdf['CO2'] /= 1000
-    max_CO2 /= 1000
-    unit = 'kilograms'
-    if max_CO2 >= 1000:
-        gdf['CO2'] /= 1000
-        max_CO2 /= 1000
-        unit = 'tons'
-else:
-    unit = 'grams'
+max_CO2, unit = convertEmissions(gdf, 'CO2', max_CO2)
 
 # Step 5: Set up the figure and axes
 fsize = 20
@@ -158,12 +149,7 @@ for timestep in gdf['timestep'].sort_values().unique():
     file_size = os.path.getsize(filename)
 
     # Convert the file size to KB or MB
-    if file_size < 1024:  # Less than 1 KB
-        size_str = f"{file_size} bytes"
-    elif file_size < 1024 ** 2:  # Less than 1 MB
-        size_str = f"{file_size / 1024:.2f} KB"
-    else:  # Larger than 1 MB
-        size_str = f"{file_size / (1024 ** 2):.2f} MB"
+    ## PUT BACK THE UNITCONVERSIONTHINGY
 
     # Print the file size
     print(f"Dataframe size: {len(CO2_gdf)}")
