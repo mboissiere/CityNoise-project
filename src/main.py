@@ -1,14 +1,9 @@
-import os
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import contextily as ctx
 import time
 from src.config.projectVariables import *
 from src.utils.manipulateData import *
 from src.utils.manipulateGeoData import *
 from src.utils.simulationDirectory import *
+from src.utils.simulationPlot import *
 from src.utils.unitConversion import *
 # Objective of version 3 :
 # speed it up (there are probably redundancies)

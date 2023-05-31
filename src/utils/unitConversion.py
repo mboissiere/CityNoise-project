@@ -3,7 +3,7 @@ This module performs conversion of units commonly encountered in the simulation.
 
 It is important to keep in check the base unit that is exported from the CSV!
 So far, instantaneous emissions are assumed to be in grams, but that could always change.
-More advanced versions could perhaps read this data from the CSV itself.
+TODO: More advanced versions could perhaps read this data from the CSV itself.
 
 TODO: I could also make object oriented programming with pint's PhysicalQuantity objects but this is not a priority
 (LMAO HELP THIS IS JUST FOR A DISPLAY, WHY DO I DO THIS, STOP)

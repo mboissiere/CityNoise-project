@@ -5,6 +5,7 @@ import geopandas as gpd
 from pyproj import CRS
 from src.constants.manipulateDataConstants import *
 
+# TODO: Implement an import from .shp file if needed, it's part of Sacha's code.
 
 # Construct the file path to the traffic data CSV file
 traffic_data_path = os.path.join(PATH_TO_DATA, FILE_NAME_FROM_DATA)
