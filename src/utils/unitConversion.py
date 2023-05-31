@@ -5,15 +5,14 @@ It is important to keep in check the base unit that is exported from the CSV!
 So far, instantaneous emissions are assumed to be in grams, but that could always change.
 More advanced versions could perhaps read this data from the CSV itself.
 
-Note: this could be even more generalized to one unit conversion function and several instances if I really wanted to
-and oh god I could also make object oriented programming but this is not a priority LMAO HELP THIS IS JUST FOR A DISPLAY
-WHY DO I DO THIS STOP
+TODO: I could also make object oriented programming with pint's PhysicalQuantity objects but this is not a priority
+(LMAO HELP THIS IS JUST FOR A DISPLAY, WHY DO I DO THIS, STOP)
 """
 from src.constants.unitConversionConstants import *
 from pandas import DataFrame
 
 
-def convertFloat(value:float, units_list:list, base:int):
+def convertFloat(value: float, units_list: list, base: int):
     """
     The very basics of a unit conversion function that converts a single output.
     Note that input_float will be modified, function does NOT act on a copy.
@@ -43,7 +42,7 @@ def convertFileSize(file_size):
     convertFloat(file_size, FILE_SIZE_UNITS, FILE_SIZE_BASE)
 
 
-def convertDataFrame(dataframe:DataFrame, key:str, max_value:float, units_list:list, base:int):
+def convertDataFrame(dataframe: DataFrame, key: str, max_value: float, units_list: list, base: int):
     """
     The very basics of a unit conversion function that converts a dataframe, using a maximum value for reference.
     Note that the dataframe and max value will be modified, function does NOT act on a copy.
@@ -69,18 +68,20 @@ def convertDataFrame(dataframe:DataFrame, key:str, max_value:float, units_list:l
     return max_value, unit
 
 
-def convertEmissions(dataframe, gas_type, max_value):
+def convertEmissions(dataframe: DataFrame, gas_type: str, max_value: float):
     """
     Receives a column from a Pandas DataFrame (or GeoPandas GeoDataFrame) with emission data, assumed to be in grams,
     and converts it to higher units for readability while assuming it won't exceed a certain value.
 
     Caution! This function would need to be adapted if the data is anything other than grams.
+    TODO: Generalize the function even more to allow different entry units.
 
     Caution! Minimum is assumed to be zero.
+    TODO: Allow minimum to also be considered in conversion, or at least raise an exception.
 
-    :param DataFrame dataframe: The dataframe containing the data we would like to convert.
-    :param str gas_type: The name of the gas of interest.
-    :param float max_value: A maximum value that will bound our visualization of the data.
+    :param dataframe: The dataframe containing the data we would like to convert.
+    :param gas_type: The name of the gas of interest.
+    :param max_value: A maximum value that will bound our visualization of the data.
     :return: Converted maximum value and its most suited unit for display
     :rtype tuple(float, str):
     """

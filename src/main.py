@@ -5,13 +5,11 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import contextily as ctx
 import time
-from datetime import datetime
 from src.config.projectVariables import *
 from src.utils.manipulateData import *
 from src.utils.manipulateGeoData import *
 from src.utils.simulationDirectory import *
 from src.utils.unitConversion import *
-
 # Objective of version 3 :
 # speed it up (there are probably redundancies)
 # investigate cartopy, seems like a better route for plotting actually
@@ -29,7 +27,6 @@ df = importFromCSV(input_columns)
 print("Snapshots will be saved under the name:", snapshot_name)
 
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
-
 print(f"Data obtained from CRS: {input_CRS.name}")
 
 reprojectEPSG(gdf, input_CRS, output_CRS)
