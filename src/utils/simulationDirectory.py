@@ -2,9 +2,11 @@
 This module configures the output folder of a simulation, and contains helper functions for display if needed.
 """
 import os
-import matplotlib.pyplot as plt
 from datetime import datetime
-from src.config.projectVariables import snapshot_name
+
+import matplotlib.pyplot as plt
+
+from src.config.projectVariables import location_name
 from src.constants.simulationDirectoryConstants import *
 
 
@@ -12,6 +14,10 @@ def createSimulationFolder():
     """
     Creates a folder in which to save screenshots from the simulation.
     Sorts it using date & time of simulation launch, as to not clog up workspace.
+
+    TODO: account for input columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
+    More ambitious simulations could try and represent chemical reactions, but for now we can assume gases
+    work independantly and thus maybe plot several dynamical figures in several folders.
 
     :return: The path of the folder where simulation files will be saved.
     :rtype str:
@@ -33,13 +39,14 @@ def createSimulationFolder():
     return simulation_folder_path
 
 
-def saveSnapshot(simulation_folder_path:str, timestep:int):
+def saveSnapshot(simulation_folder_path: str, timestep: int):
     """
     Saves the current figure in pyplot as an image.
 
+    TODO: account for input columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
     :param simulation_folder_path: Path of the simulation folder where snapshots will be saved.
     :param timestep: Timestep currently represented by the snapshot being saved.
     :return: None
     """
-    filename = f'{simulation_folder_path}/{snapshot_name}_{timestep}.{FILE_FORMAT}'
+    filename = f'{simulation_folder_path}/{location_name}_{timestep}.{FILE_FORMAT}'
     plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)

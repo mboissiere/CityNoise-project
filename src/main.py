@@ -19,7 +19,7 @@ from src.utils.unitConversion import *
 # Set snapshot names - timesteps will be added automatically
 
 df = importFromCSV(input_columns)
-print("Snapshots will be saved under the name:", snapshot_name)
+print("Snapshots will be saved under the name:", location_name)
 
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
 print(f"Data obtained from CRS: {input_CRS.name}")

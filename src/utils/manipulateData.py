@@ -1,19 +1,15 @@
-from os.path import join
-import os
-import pandas as pd
 import geopandas as gpd
+import pandas as pd
 from pyproj import CRS
+
 from src.constants.manipulateDataConstants import *
+
 
 # TODO: Implement an import from .shp file if needed, it's part of Sacha's code.
 
-# Construct the file path to the traffic data CSV file
-traffic_data_path = os.path.join(PATH_TO_DATA, FILE_NAME_FROM_DATA)
-
 
 # Read the CSV file into a Pandas dataframe
-def importFromCSV(columns:list):
-
+def importFromCSV(columns: list):
     """
     This function imports data from a CSV file into a Pandas DataFrame, assuming the CSV file has columns with timestep,
     longitude, and latitude.
@@ -36,17 +32,17 @@ def importFromCSV(columns:list):
     return df
 
 
-def geoDataFrameFromDataFrame(df, crs):
+def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
     """
     This function converts a Pandas DataFrame object into a GeoPandas GeoDataFrame object,
     assuming the dataframe has longitude and latitude columns whose mapping follow a given CRS.
 
     Improvements of this method could perhaps include an exception to be raised if no longitude/latitude is found.
 
-    :param pd.DataFrame df: The DataFrame object to be converted. Requires a longitude and latitude column.
-    :param CRS crs: The CRS of the mapping that the DataFrame object represents.
+    :param df: The DataFrame object to be converted. Requires a longitude and latitude column.
+    :param crs: The CRS of the mapping that the DataFrame object represents.
     :return: A GeoDataFrame object, now gaining additional methods by the GeoPandas module.
-    :rtype gpd.GeoDataFrame:
+    :rtype GeoDataFrame:
     """
     geometry = gpd.points_from_xy(df[LONGITUDE_COLUMN], df[LATITUDE_COLUMN])
     gdf = gpd.GeoDataFrame(df, geometry=geometry, crs=crs)

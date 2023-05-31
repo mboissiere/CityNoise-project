@@ -3,8 +3,8 @@ This file gathers all project variables (written in lower_snake_case) that play 
 """
 from src.constants.manipulateGeoDataConstants import *
 
-# Can be made to change depending on neighborhood studied, but we're not that far in the code yet, so constant for now.
-snapshot_name = "sodermalm"
+# Can be made to change depending on neighborhood studied.
+location_name = "sodermalm"
 
 # Names of columns that will be imported and studied. Timestep, longitude and latitude are already imported by default.
 input_columns = ['CO2']
