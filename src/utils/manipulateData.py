@@ -22,7 +22,7 @@ def importFromCSV(columns: list):
     :rtype DataFrame:
     """
 
-    df = pd.read_csv(traffic_data_path,
+    df = pd.read_csv(TRAFFIC_DATA_PATH,
                      usecols=[TIMESTEP_COLUMN,
                               LONGITUDE_COLUMN,
                               LATITUDE_COLUMN].append(columns),

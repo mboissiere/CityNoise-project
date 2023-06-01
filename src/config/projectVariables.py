@@ -1,7 +1,9 @@
 """
 This file gathers all project variables (written in lower_snake_case) that play a role in the simulation configuration.
 """
-from src.constants.manipulateGeoDataConstants import *
+from pyproj import CRS
+
+from src.constants.manipulateDataConstants import *
 
 # Can be made to change depending on neighborhood studied.
 location_name = "sodermalm"
@@ -10,7 +12,7 @@ location_name = "sodermalm"
 input_columns = ['CO2']
 
 # EPSG identifier of the CRS used in the creation of the input CSV
-input_CRS = EPSG_WORLD_GEODESIC_SYSTEM
+input_CRS = CRS.from_epsg(EPSG_WORLD_GEODESIC_SYSTEM)
 
 # EPSG identifier of the output CRS desired in case of reprojection
-output_CRS = EPSG_PSEUDO_MERCATOR
+output_CRS = CRS.from_epsg(EPSG_PSEUDO_MERCATOR)

@@ -5,13 +5,22 @@ It is possible to modify them here, but in normal execution shouldn't need to ha
 import os
 
 # Path from the main.py folder to the data folder, where (potentially multiple) CSVs can be found.
-PATH_TO_DATA = "../data"
+PATH_TO_DATA = os.path.join('..', 'data')
 
 # Name of the import of interest.
-FILE_NAME_FROM_DATA = "traffic_data"
+FILE_NAME_FROM_DATA = "traffic_data.csv"
 
 # Constructed file path to the traffic data CSV file
-traffic_data_path = os.path.join(PATH_TO_DATA, FILE_NAME_FROM_DATA)
+TRAFFIC_DATA_PATH = os.path.join(PATH_TO_DATA, FILE_NAME_FROM_DATA)
+
+# EPSG identifier of the World Geodetic System CRS
+EPSG_WORLD_GEODESIC_SYSTEM = 4326
+
+# EPSG identifier of the pseudo-Mercator CRS
+EPSG_PSEUDO_MERCATOR = 3857
+
+# EPSG identifier of the Stockholm CRS
+EPSG_STOCKHOLM = 4814
 
 # Name of the CSV column that holds timestep data.
 TIMESTEP_COLUMN = "timestep"
