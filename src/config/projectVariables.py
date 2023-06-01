@@ -3,7 +3,7 @@ This file gathers all project variables (written in lower_snake_case) that play 
 """
 from pyproj import CRS
 
-from src.constants.manipulateDataConstants import *
+from src.config.projectConstants import *
 
 # Can be made to change depending on neighborhood studied.
 location_name = "sodermalm"
@@ -16,3 +16,6 @@ input_CRS = CRS.from_epsg(EPSG_WORLD_GEODESIC_SYSTEM)
 
 # EPSG identifier of the output CRS desired in case of reprojection
 output_CRS = CRS.from_epsg(EPSG_PSEUDO_MERCATOR)
+
+# Car icon, if one wants to make a scatter plot with car markers
+CAR_ICON_PATH = "../view/car_16px.png"

@@ -1,11 +1,9 @@
 import codecarbon
 
-from src.constants.codeEmissionsConstants import *
-
 
 def initializeCarbonTracker(output_directory: str):
     """
-    
+
     :param output_directory:
     :return:
     """

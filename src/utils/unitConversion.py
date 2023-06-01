@@ -10,7 +10,7 @@ TODO: I could also make object oriented programming with pint's PhysicalQuantity
 """
 from pandas import DataFrame
 
-from src.constants.unitConversionConstants import *
+from src.utils.constants.unitConversionConstants import *
 
 
 def convertFloat(value: float, units_list: list, base: int):

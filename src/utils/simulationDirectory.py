@@ -7,7 +7,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 from src.config.projectVariables import location_name
-from src.constants.simulationDirectoryConstants import *
+from src.utils.constants.simulationDirectoryConstants import *
 
 
 def createSimulationFolder():

@@ -1,10 +1,13 @@
 from time import time
 
 from src.config.projectVariables import *
+from src.objects.geoAxes import GeoAxes
+from src.objects.geoBasemap import GeoBasemap
+from src.objects.geoFigure import GeoFigure
+from src.objects.geoScatterplot import GeoScatterplot
 from src.utils.codeEmissions import *
 from src.utils.manipulateData import *
 from src.utils.simulationDirectory import *
-from src.utils.simulationPlot import *
 from src.utils.unitConversion import *
 
 simulation_folder_path = createSimulationFolder()
@@ -14,7 +17,7 @@ tracker = initializeCarbonTracker(simulation_folder_path)
 print("Initialized carbon tracker for the running code.")
 
 tracker.start()
-print("Started tracking")
+print("Started tracking.")
 
 df = importFromCSV(input_columns)
 print(f"Snapshots will be saved in {FILE_FORMAT} format under the name: {location_name}.")
@@ -25,17 +28,25 @@ print(f"Data obtained in CRS: {input_CRS.name}")
 gdf.to_crs(output_CRS)
 print(f"Reprojecting to: {output_CRS.name}")
 
-fig, ax = initializeFigureAndAxes(gdf)
-print("Initializing figure and axes...")
+fig = GeoFigure()
+print("Initializing figure...")
 
-sc = initializeScatterPlot(ax)
+ax = GeoAxes()
+print("Initializing axes...")
+
+sc = GeoScatterplot(ax)
 print("Initializing scatter plot...")
+
+cx = GeoBasemap(gdf)
+print("Initializing basemap...")
+
+cx.addBasemapToAxes(ax)
+print("Adding basemap to axes...")
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
     timestep_gdf = gdf[gdf['timestep'] == timestep]
-    updateScatterPlotFromGeoDataFrame(sc, timestep_gdf)
-    addBasemapFromCRS(ax, output_CRS)
+    sc.updateFromGeoDataFrame(timestep_gdf)
     end_time = time()  # Stop measuring the time
     # Calculate the elapsed time
     elapsed_time = end_time - start_time
