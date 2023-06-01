@@ -4,8 +4,8 @@ It is possible to modify them here, but in normal execution shouldn't need to ha
 """
 import os
 
-# Path from the main.py folder to the data folder, where (potentially multiple) CSVs can be found.
-PATH_TO_DATA = os.path.join('../..', 'data')
+# Path from the FOLDER WHERE manipulateData IS RUN to the data folder, where (potentially multiple) CSVs can be found.
+PATH_TO_DATA = os.path.join('..', 'data')
 
 # Name of the import of interest.
 FILE_NAME_FROM_DATA = "traffic_data.csv"
