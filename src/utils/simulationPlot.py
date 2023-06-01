@@ -7,7 +7,23 @@ Let's not that I'm not completely excluding the possibility of doing it over FEn
 equation to solve. That being said, it seems very complicated for now, so let's start simple!
 """
 import geopandas as gpd
+import matplotlib.pyplot as plt
+
+from src.constants.simulationPlotConstants import *
 
 
-def setAxesLimit(gdf: gpd.GeoDataFrame):
+def initializeFigureAndAxes(gdf: gpd.GeoDataFrame):
+    """
+    Initializes the area where the data will be plotted, using the bounds of the geographical data.
+    
+    :param gdf: The GeoDataFrame containing data of interest.*
+    :return: The figure (Line2D object that will host the plot lines and markers)
+    and the axes (Axes object that represents coordinates on which the plot is created)
+    """
+    fig, ax = plt.subplots(figsize=(FIGURE_SIZE_X, FIGURE_SIZE_Y))
     min_lon, min_lat, max_lon, max_lat = gdf.total_bounds
+    ax.set_aspect(AXES_ASPECT_MODE)
+    ax.set_axis_off()
+    ax.set_xlim(min_lon, max_lon)
+    ax.set_ylim(min_lat, max_lat)
+    return fig, ax

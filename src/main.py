@@ -1,10 +1,14 @@
 import time
+
+from codecarbon import EmissionsTracker
+
 from src.config.projectVariables import *
 from src.utils.manipulateData import *
 from src.utils.manipulateGeoData import *
 from src.utils.simulationDirectory import *
 from src.utils.simulationPlot import *
 from src.utils.unitConversion import *
+
 # Objective of version 3 :
 # speed it up (there are probably redundancies)
 # investigate cartopy, seems like a better route for plotting actually
@@ -18,6 +22,7 @@ from src.utils.unitConversion import *
 
 # Set snapshot names - timesteps will be added automatically
 
+tracker = EmissionsTracker()
 df = importFromCSV(input_columns)
 print("Snapshots will be saved under the name:", location_name)
 
@@ -33,32 +38,19 @@ groupedCO2 = gdf.groupby(['latitude', 'longitude'])['CO2'].sum()
 # Calculate the maximum CO2 pollution at a single point
 max_CO2 = groupedCO2.max()
 
-
 print(f"Longitudes x latitudes explored: {len(gdf['longitude'])} x  {len(gdf['latitude'])}")
-
-
-
-# Step 3: Calculate the bounding box coordinates
-min_lon, min_lat, max_lon, max_lat = gdf.total_bounds
 
 max_CO2, unit = convertEmissions(gdf, 'CO2', max_CO2)
 
 # Step 5: Set up the figure and axes
-fsize = 20
-fig, ax = plt.subplots(figsize = (fsize, fsize))
-# Explain exactly what fig and ax are ! The figure and the colorbar, subplots side to side. This is where we control the size.
-ax.set_aspect('equal')
-ax.set_axis_off()
-ax.set_xlim(min_lon, max_lon)
-ax.set_ylim(min_lat, max_lat)
+fig, ax = initializeFigureAndAxes(gdf)
 
 # Calculate the appropriate zoom level based on the extent of the data
-#zoom_level = ctx.tile._calculate_zoom(min_lat, max_lat, min_lon, max_lon)
-#print(zoom_level) apparently 5 ?
+# zoom_level = ctx.tile._calculate_zoom(min_lat, max_lat, min_lon, max_lon)
+# print(zoom_level) apparently 5 ?
 
 # Adjust the zoom level to fit within the valid range
-#zoom_level = min(zoom_level, 18)  # Set the maximum valid zoom level
-
+# zoom_level = min(zoom_level, 18)  # Set the maximum valid zoom level
 
 
 print("Initializing colorbar...")
@@ -90,12 +82,12 @@ for timestep in gdf['timestep'].sort_values().unique():
 
     # Update CO2 values in the result DataFrame
     for index, row in timestep_data.iterrows():
-        #Perhaps for loops are still too slow, and some native GeoPandas functions are better.
+        # Perhaps for loops are still too slow, and some native GeoPandas functions are better.
         location_match = (CO2_gdf['latitude'] == row['latitude']) & (CO2_gdf['longitude'] == row['longitude'])
         CO2_gdf.loc[location_match, 'CO2'] += row['CO2']
     CO2_values = CO2_gdf[timestep_data.index]
 
-# Update the scatter plot
+    # Update the scatter plot
     sc = ax.scatter(
         CO2_geometry.x,
         CO2_geometry.y,
@@ -110,11 +102,11 @@ for timestep in gdf['timestep'].sort_values().unique():
     # ctx.add_basemap(ax, crs=gdf.crs, source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.5, zoom=zoom_level)
     ctx.add_basemap(ax, crs=gdf.crs, source=ctx.providers.OpenStreetMap.Mapnik)
     # additional unspecifies arguments : alpha=1, zoom=14
-    #zoom provides a balance between low and high detail. Starting at 12 for reasonable info, 18 is max but takes huge amounts to generate.
+    # zoom provides a balance between low and high detail. Starting at 12 for reasonable info, 18 is max but takes huge amounts to generate.
     # To have an idea : 12 zoom takes a few seconds to generate, has abt 900 kb without further compression, is blurry.
     # 16 zoom takes
     # Explain this funky alpha value
-    #cbar.ax.set_ylabel(f'CO2 Pollution ({unit})')
+    # cbar.ax.set_ylabel(f'CO2 Pollution ({unit})')
 
     end_time = time.time()  # Stop measuring the time
     # Calculate the elapsed time
@@ -135,7 +127,8 @@ for timestep in gdf['timestep'].sort_values().unique():
     print(f"File size: {size_str}")
 
 # Step 7: Display a message indicating the snapshots have been saved
-print("Snapshots saved successfully.") 
+print("Snapshots saved successfully.")
+codeEmissions: float = tracker.stop()
+print(f"CO2 emissions induced by code: {codeEmissions}")
 
 # Add some prints yeah. But allow them to be turned off altogether. Perhaps seperate functions into stuff like the file size truncator.
-

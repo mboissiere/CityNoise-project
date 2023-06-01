@@ -22,5 +22,8 @@ SCATTER_POINT_SIZE = 1
 # Car icon, purely aesthetic
 CAR_ICON_PATH = "../view/car_16px.png"
 
+# Resizing of axes - can be set to 'equal' if a square aspect ratio is desired.
+AXES_ASPECT_MODE = 'auto'
+
 # The source for the basemap, in the background of the plot
 BASEMAP_SOURCE = ctx.providers.OpenStreetMap.Mapnik
