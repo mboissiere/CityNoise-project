@@ -1,4 +1,4 @@
-import time
+from time import time
 
 import codecarbon
 
@@ -6,6 +6,7 @@ from src.config.projectVariables import *
 from src.utils.manipulateData import *
 from src.utils.simulationDirectory import *
 from src.utils.simulationPlot import *
+from src.utils.unitConversion import *
 
 # Objective of version 3 :
 # speed it up (there are probably redundancies)
@@ -20,7 +21,9 @@ from src.utils.simulationPlot import *
 
 # Set snapshot names - timesteps will be added automatically
 
-tracker = codecarbon.EmissionsTracker()
+tracker = codecarbon.OfflineEmissionsTracker(country_iso_code="SWE")
+tracker.start()
+
 df = importFromCSV(input_columns)
 print("Snapshots will be saved under the name:", location_name)
 
@@ -33,32 +36,32 @@ print(f"Reprojecting to: {output_CRS.name}")
 fig, ax = initializeFigureAndAxes(gdf)
 print("Initializing figure and axes...")
 
+sc = initializeScatterPlot(ax)
+print("Initializing scatter plot...")
+
+simulation_folder_path = createSimulationFolder()
+print(f"Created simulation output folder: {simulation_folder_path}")
+
 for timestep in gdf['timestep'].sort_values().unique():
-    start_time = time.time()
+    start_time = time()
     timestep_gdf = gdf[gdf['timestep'] == timestep]
-    addScatterPlotFromGeoDataFrame(timestep_gdf)
-    addBasemapFromCRS(output_CRS)
-    end_time = time.time()  # Stop measuring the time
+    sc = updateScatterPlotFromGeoDataFrame(sc, ax, timestep_gdf)
+    addBasemapFromCRS(ax, output_CRS)
+    end_time = time()  # Stop measuring the time
     # Calculate the elapsed time
     elapsed_time = end_time - start_time
 
     # Print the elapsed time in seconds
-    print(f"-= Snapshot {timestep} =-")
+    print(f"\n-= Snapshot {timestep} =-")
     print(f"Generation time: {elapsed_time:.2f} seconds")
 
-    # Get the size of the file in bytes
-    file_size = os.path.getsize(filename)
-
-    # Convert the file size to KB or MB
-    ## PUT BACK THE UNITCONVERSIONTHINGY
-
-    # Print the file size
-    print(f"Dataframe size: {len(CO2_gdf)}")
-    print(f"File size: {size_str}")
+    file_size_bytes = saveSnapshot(simulation_folder_path, timestep)
+    file_size, unit = convertFileSize(file_size_bytes)
+    print(f"File size: {file_size:.2f} {unit}")
 
 # Step 7: Display a message indicating the snapshots have been saved
 print("Snapshots saved successfully.")
-codeEmissions: float = codecarbon.tracker.stop()
-print(f"CO2 emissions induced by code: {codeEmissions}")
+codeEmissions: float = tracker.stop()
+print(f"CO2eq emissions induced by code: {codeEmissions} kg")
 
 # Add some prints yeah. But allow them to be turned off altogether. Perhaps seperate functions into stuff like the file size truncator.

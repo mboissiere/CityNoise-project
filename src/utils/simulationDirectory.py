@@ -46,7 +46,10 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
     TODO: account for input columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
     :param simulation_folder_path: Path of the simulation folder where snapshots will be saved.
     :param timestep: Timestep currently represented by the snapshot being saved.
-    :return: None
+    :return: Its file size, in bytes.
+    :rtype int:
     """
     filename = f'{simulation_folder_path}/{location_name}_{timestep}.{FILE_FORMAT}'
     plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)
+    plt.close()
+    return os.path.getsize(filename)

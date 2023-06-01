@@ -8,8 +8,9 @@ TODO: More advanced versions could perhaps read this data from the CSV itself.
 TODO: I could also make object oriented programming with pint's PhysicalQuantity objects but this is not a priority
 (LMAO HELP THIS IS JUST FOR A DISPLAY, WHY DO I DO THIS, STOP)
 """
-from src.constants.unitConversionConstants import *
 from pandas import DataFrame
+
+from src.constants.unitConversionConstants import *
 
 
 def convertFloat(value: float, units_list: list, base: int):
@@ -39,7 +40,7 @@ def convertFileSize(file_size):
     :return: Converted file size and its most suited unit for display.
     :rtype tuple(float, str):
     """
-    convertFloat(file_size, FILE_SIZE_UNITS, FILE_SIZE_BASE)
+    return convertFloat(file_size, FILE_SIZE_UNITS, FILE_SIZE_BASE)
 
 
 def convertDataFrame(dataframe: DataFrame, key: str, max_value: float, units_list: list, base: int):
@@ -85,4 +86,4 @@ def convertEmissions(dataframe: DataFrame, gas_type: str, max_value: float):
     :return: Converted maximum value and its most suited unit for display
     :rtype tuple(float, str):
     """
-    convertDataFrame(dataframe, gas_type, max_value, WEIGHT_KILO_UNITS, KILO_UNIT_BASE)
+    return convertDataFrame(dataframe, gas_type, max_value, WEIGHT_KILO_UNITS, KILO_UNIT_BASE)

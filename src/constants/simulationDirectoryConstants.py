@@ -4,9 +4,7 @@ It is possible to modify them here, but in normal execution shouldn't need to ha
 """
 
 # Standard notation for an output folder, can be changed if desired.
-OUTPUT_STANDARD = "output"
-
-
+OUTPUT_STANDARD = "../output"
 
 # File format is jpg by default. Can be png, but be aware file sizes can get quite large for not much benefit.
 FILE_FORMAT = "jpg"
