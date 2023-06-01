@@ -37,10 +37,10 @@ print("Initializing axes...")
 sc = GeoScatterplot(ax)
 print("Initializing scatter plot...")
 
-cx = GeoBasemap(gdf)
+cx = GeoBasemap()
 print("Initializing basemap...")
 
-cx.addBasemapToAxes(ax)
+cx.addBasemapFromGeoDataFrame(ax, gdf)
 print("Adding basemap to axes...")
 
 for timestep in gdf['timestep'].sort_values().unique():

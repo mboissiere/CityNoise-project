@@ -2,6 +2,8 @@ import geopandas as gpd
 import pandas as pd
 from pyproj import CRS
 
+from src.utils.constants.manipulateDataConstants import *
+
 
 # TODO: Implement an import from .shp file if needed, it's part of Sacha's code.
 

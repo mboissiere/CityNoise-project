@@ -1,5 +1,7 @@
 import codecarbon
 
+from src.utils.constants.codeEmissionsConstants import *
+
 
 def initializeCarbonTracker(output_directory: str):
     """
