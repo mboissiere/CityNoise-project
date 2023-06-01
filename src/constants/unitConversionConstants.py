@@ -1,6 +1,6 @@
 """
-This file gathers constants (written in UPPER_SNAKE_CASE) and variables (written in lower_snake_case) to be called in
-the unit conversion function (see utils).
+This file gathers constants_2 (written in UPPER_SNAKE_CASE) and variables (written in lower_snake_case) to be called in
+the unit conversion function (see utils2).
 """
 
 # Notations for standard file size units.

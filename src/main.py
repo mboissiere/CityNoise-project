@@ -8,20 +8,13 @@ from src.utils.simulationDirectory import *
 from src.utils.simulationPlot import *
 from src.utils.unitConversion import *
 
-# Objective of version 3 :
-# speed it up (there are probably redundancies)
-# investigate cartopy, seems like a better route for plotting actually
-# if anything, this really probably should be a heatmap, and not a scatter plot.
-# maybe it's not so stupid to be able to set a t_min and t_max. that way if animation is interrupted, we can start from later on?
-# it's kind of annoying actually that the blue isn't all that impressive because if a latitude and longitude isn't "exactly right" well it won't be summed...
+simulation_folder_path = createSimulationFolder()
+print(f"Created simulation output folder: {simulation_folder_path}")
 
-# a numpy approach of a mesh grid could be fine, so that points would be accumulated in areas
-# and also computations arent too long. apparently scipy has good content for sparse matrices.
-# MIGRATE TO GITHUB BECAUSE ACTUALLY MANUAL VERSIONING IS A MESS IF I WANT TO IMPLEMENT AN IDEA TO FUNCTIONAL OR TEST
-
-# Set snapshot names - timesteps will be added automatically
-
-tracker = codecarbon.OfflineEmissionsTracker(country_iso_code="SWE")
+# To be isolated
+tracker = codecarbon.OfflineEmissionsTracker(country_iso_code="SWE",
+                                             output_dir=simulation_folder_path,
+                                             output_file="kgCO2eq_emitted_by_code.csv")
 tracker.start()
 
 df = importFromCSV(input_columns)
@@ -39,13 +32,10 @@ print("Initializing figure and axes...")
 sc = initializeScatterPlot(ax)
 print("Initializing scatter plot...")
 
-simulation_folder_path = createSimulationFolder()
-print(f"Created simulation output folder: {simulation_folder_path}")
-
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
     timestep_gdf = gdf[gdf['timestep'] == timestep]
-    sc = updateScatterPlotFromGeoDataFrame(sc, ax, timestep_gdf)
+    updateScatterPlotFromGeoDataFrame(sc, timestep_gdf)
     addBasemapFromCRS(ax, output_CRS)
     end_time = time()  # Stop measuring the time
     # Calculate the elapsed time
