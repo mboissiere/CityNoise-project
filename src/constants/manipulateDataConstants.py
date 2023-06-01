@@ -1,5 +1,5 @@
 """
-This file gathers constants_2 (written in UPPER_SNAKE_CASE) to be called in the importing of an input CSV file.
+This file gathers constants (written in UPPER_SNAKE_CASE) to be called in the importing of an input CSV file.
 It is possible to modify them here, but in normal execution shouldn't need to happen too often.
 """
 import os

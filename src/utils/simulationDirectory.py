@@ -49,7 +49,8 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
     :return: Its file size, in bytes.
     :rtype int:
     """
-    filename = f'{simulation_folder_path}/{location_name}_{timestep}.{FILE_FORMAT}'
+    snapshot_path = os.path.join(simulation_folder_path, SNAPSHOT_FOLDER_NAME)
+    filename = f'{snapshot_path}/{location_name}_{timestep}.{FILE_FORMAT}'
     plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)
     plt.close()
     return os.path.getsize(filename)

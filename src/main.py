@@ -1,8 +1,7 @@
 from time import time
 
-import codecarbon
-
 from src.config.projectVariables import *
+from src.utils.codeEmissions import *
 from src.utils.manipulateData import *
 from src.utils.simulationDirectory import *
 from src.utils.simulationPlot import *
@@ -11,17 +10,17 @@ from src.utils.unitConversion import *
 simulation_folder_path = createSimulationFolder()
 print(f"Created simulation output folder: {simulation_folder_path}")
 
-# To be isolated
-tracker = codecarbon.OfflineEmissionsTracker(country_iso_code="SWE",
-                                             output_dir=simulation_folder_path,
-                                             output_file="kgCO2eq_emitted_by_code.csv")
+tracker = initializeCarbonTracker(simulation_folder_path)
+print("Initialized carbon tracker for the running code.")
+
 tracker.start()
+print("Started tracking")
 
 df = importFromCSV(input_columns)
-print("Snapshots will be saved under the name:", location_name)
+print(f"Snapshots will be saved in {FILE_FORMAT} format under the name: {location_name}.")
 
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
-print(f"Data obtained from CRS: {input_CRS.name}")
+print(f"Data obtained in CRS: {input_CRS.name}")
 
 gdf.to_crs(output_CRS)
 print(f"Reprojecting to: {output_CRS.name}")
