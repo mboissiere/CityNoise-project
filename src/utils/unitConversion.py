@@ -13,10 +13,11 @@ from pandas import DataFrame
 from src.utils.constants.unitConversionConstants import *
 
 
-def convertFloat(value: float, units_list: list, base: int):
+def convertValue(value, units_list: list, base: int):
     """
     The very basics of a unit conversion function that converts a single output.
-    Note that input_float will be modified, function does NOT act on a copy.
+    Note that the value will be modified, function does NOT act on a copy.
+    Value can be either an integer or a float.
 
     :param value: The value to be converted.
     :param units_list: A list of strings containing names of units in the system of interest.
@@ -32,15 +33,26 @@ def convertFloat(value: float, units_list: list, base: int):
     return value, unit
 
 
-def convertFileSize(file_size):
+def convertFileSize(file_size: float):
     """
     Convert a filesize in bytes to higher units for readability.
 
-    :param float file_size: Initial size of the file, in bytes.
+    :param file_size: Initial size of the file, in bytes.
     :return: Converted file size and its most suited unit for display.
     :rtype tuple(float, str):
     """
-    return convertFloat(file_size, FILE_SIZE_UNITS, FILE_SIZE_BASE)
+    return convertValue(file_size, FILE_SIZE_UNITS, FILE_SIZE_BASE)
+
+
+def convertTime(time: int):
+    """
+    Convert a time in seconds to higher units for readability.
+
+    :param time: Initial time, in seconds.
+    :return: Converted time and its most suited unit for display.
+    :rtype tuple(float, str):
+    """
+    return convertValue(time, TIME_UNITS, TIME_BASE)
 
 
 def convertDataFrame(dataframe: DataFrame, key: str, max_value: float, units_list: list, base: int):

@@ -14,3 +14,9 @@ WEIGHT_KILO_UNITS = ['g', 'kg', 't', 'kt', 'Mt', 'Gt']
 
 # Base for standard conversion by a thousand.
 KILO_UNIT_BASE = 1000
+
+# Notations for standard time.
+TIME_UNITS = ['s', 'min', 'h']
+
+# Base for time unit conversion
+TIME_BASE = 60

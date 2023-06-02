@@ -48,5 +48,11 @@ for timestep in gdf['timestep'].sort_values().unique():
 
 print("Snapshots saved successfully.")
 
+simulated_time_seconds = simulatedTimeFromGeoDataFrame(gdf)
+simulated_time, unit = convertTime(simulated_time_seconds)
+
+video_name = location_name + simulated_time + unit
+assembleVideo(simulation_folder_path, video_name)
+
 codeEmissions: float = tracker.stop()
 print(f"CO2eq emissions induced by code: {codeEmissions} kg")

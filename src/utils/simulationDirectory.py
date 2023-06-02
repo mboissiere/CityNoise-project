@@ -4,6 +4,7 @@ This module configures the output folder of a simulation, and contains helper fu
 import os
 from datetime import datetime
 
+import imageio.v2 as imageio
 import matplotlib.pyplot as plt
 
 from src.config.projectVariables import location_name
@@ -54,3 +55,15 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
     filename = f'{snapshot_path}/{location_name}_{timestep}.{FILE_FORMAT}'
     plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)
     return os.path.getsize(filename)
+
+
+def assembleVideo(simulation_folder_path: str, output_video_name: str):
+    snapshot_folder_path = os.path.join(simulation_folder_path, SNAPSHOT_FOLDER_NAME)
+    snapshots = sorted([file for file in os.listdir(snapshot_folder_path) if file.endswith(FILE_FORMAT)])
+    frames = []
+    for snapshot in snapshots:
+        snapshot_path = os.path.join(snapshot_folder_path, snapshot)
+        image = imageio.imread(snapshot_path)
+        frames.append(image)
+    output_video_path = os.path.join(simulation_folder_path, output_video_name)
+    imageio.mimsave(output_video_path, frames, fps=FRAMES_PER_SECOND)

@@ -17,3 +17,6 @@ DPI = 300
 
 # Argument to be parsed in plt.savefig - wraps size of bounding box around image
 BBOX_SETTINGS = "tight"
+
+# Number of frames per second in an assembled video of the screenshots
+FRAMES_PER_SECOND = 10
