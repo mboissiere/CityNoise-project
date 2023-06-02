@@ -17,7 +17,7 @@ tracker.start()
 print("Started tracking.")
 
 df = importFromCSV(input_columns)
-print(f"Snapshots will be saved in {FILE_FORMAT} format under the name: {location_name}.")
+print(f"Snapshots will be saved in {IMAGE_FILE_FORMAT} format under the name: {location_name}.")
 
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
 print(f"Data obtained in CRS: {input_CRS.name}")
@@ -43,15 +43,15 @@ for timestep in gdf['timestep'].sort_values().unique():
     print(f"Generation time: {elapsed_time:.2f} seconds")
 
     file_size_bytes = saveSnapshot(simulation_folder_path, timestep)
-    file_size, unit = convertFileSize(file_size_bytes)
-    print(f"File size: {file_size:.2f} {unit}")
+    file_size, file_size_unit = convertFileSize(file_size_bytes)
+    print(f"File size: {file_size:.2f} {file_size_unit}")
 
 print("Snapshots saved successfully.")
 
 simulated_time_seconds = simulatedTimeFromGeoDataFrame(gdf)
-simulated_time, unit = convertTime(simulated_time_seconds)
+simulated_time, time_unit = convertTime(simulated_time_seconds)
 
-video_name = location_name + simulated_time + unit
+video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
 assembleVideo(simulation_folder_path, video_name)
 
 codeEmissions: float = tracker.stop()
