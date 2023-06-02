@@ -31,7 +31,7 @@ print(f"Reprojecting to: {output_CRS.name}")
 fig = GeoFigure()
 print("Initializing figure...")
 
-ax = GeoAxes(fig)
+ax = GeoAxes(fig, gdf)
 print("Initializing axes...")
 
 sc = GeoScatterplot(ax)
