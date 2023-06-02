@@ -27,7 +27,7 @@ SHOW_AXES = False
 AXES_ASPECT_MODE = "equal"
 
 # Size of the points or markers in a scatter plot, if it is chosen constant
-SCATTER_SIZE = 5
+SCATTER_MARKERSIZE = 3
 
 # Color of the points in a scatter plot
 SCATTER_COLOR = "white"
@@ -37,6 +37,9 @@ SCATTER_MARKER = 'o'
 
 # Choice of the markers' edge colors in a scatter plot
 SCATTER_EDGECOLOR = "black"
+
+# Choice of the markers' edge size in a scatter plot
+SCATTER_LINEWIDTH = 0.5
 
 # The source for the basemap, in the background of the plot
 BASEMAP_SOURCE = ctx.providers.OpenStreetMap.Mapnik

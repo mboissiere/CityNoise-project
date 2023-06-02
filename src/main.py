@@ -27,19 +27,17 @@ gdf = geoDataFrameFromDataFrame(df, input_CRS)
 print(f"Data obtained in CRS: {input_CRS.name}")
 
 gdf.to_crs(output_CRS)
-print(f"Reprojecting to: {output_CRS.name}")
+print(f"Re-projecting to: {output_CRS.name}")
 
 fig = GeoFigure()
 print("Initializing figure and axes...")
-
-fig.updateAxesFromGeoDataFrame(gdf)
-print("Adjusting axes to data geometry...")
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
     timestep_gdf = gdf[gdf['timestep'] == timestep]
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
+    fig.adjustAxesFromGeoDataFrame(gdf)
     end_time = time()  # Stop measuring the time
     # Calculate the elapsed time
     elapsed_time = end_time - start_time

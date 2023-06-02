@@ -7,23 +7,22 @@ from src.objects.constants.geoFigureConstants import *
 class GeoFigure:
     def __init__(self):
         self.fig, self.ax = plt.subplots(figsize=(FIGURE_SIZE_X, FIGURE_SIZE_Y))
-        self.ax.set_aspect(AXES_ASPECT_MODE)
-        if not SHOW_AXES:
-            self.ax.set_axis_off()
 
-    def updateAxesFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
+    def adjustAxesFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
+        self.ax.set_aspect(AXES_ASPECT_MODE)
         min_lon, min_lat, max_lon, max_lat = gdf.total_bounds
         self.ax.set_xlim(min_lon, max_lon)
         self.ax.set_ylim(min_lat, max_lat)
+        if not SHOW_AXES:
+            self.ax.set_axis_off()
 
     def createScatterPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
-        self.ax.scatter(gdf.geometry.x,
-                        gdf.geometry.y,
-                        color=SCATTER_COLOR,
-                        s=SCATTER_SIZE,
-                        marker=SCATTER_MARKER,
-                        edgecolor=SCATTER_EDGECOLOR
-                        )
+        self.ax = gdf.plot(color=SCATTER_COLOR,
+                           marker=SCATTER_MARKER,
+                           markersize=SCATTER_MARKERSIZE,
+                           edgecolor=SCATTER_EDGECOLOR,
+                           linewidth=SCATTER_LINEWIDTH
+                           )
 
     def addBasemapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
         # basemap_extent = gdf.total_bounds
