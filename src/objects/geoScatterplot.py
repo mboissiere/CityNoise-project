@@ -9,8 +9,8 @@ class GeoScatterplot(matplotlib.collections.PathCollection):
     def __init__(self, ax: matplotlib.axes.Axes):
         super().__init__(paths=[], sizes=[], offsets=[], transOffset=ax.transData)
         ax.add_collection(self)
-        self.set_marker(SCATTER_MARKER)
-        self.set_color(SCATTER_COLOR)
+        self._marker.set_marker(SCATTER_MARKER)
+        self._facecolors = SCATTER_COLOR
         # TODO: constant size is assumed, perhaps later size will be variable?
         # Same thing with vehicle appearance, color... Could change...
         self.set_sizes(SCATTER_MARKERSIZE)
