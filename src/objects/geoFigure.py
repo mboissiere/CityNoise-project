@@ -16,19 +16,14 @@ class GeoFigure:
         self.ax.set_xlim(min_lon, max_lon)
         self.ax.set_ylim(min_lat, max_lat)
 
-    def addScatterPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
-        sc = self.ax.scatter(gdf.geometry.x,
-                             gdf.geometry.y,
-                             color=SCATTER_COLOR,
-                             s=SCATTER_SIZE,
-                             marker=SCATTER_MARKER,
-                             edgecolor=SCATTER_EDGECOLOR
-                             )
-        return sc
-
-    @staticmethod
-    def updateScatterPlotFromGeoDataFrame(sc, gdf: geopandas.GeoDataFrame):
-        sc.set_offsets(list(zip(gdf.geometry.x, gdf.geometry.y)))
+    def createScatterPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
+        self.ax.scatter(gdf.geometry.x,
+                        gdf.geometry.y,
+                        color=SCATTER_COLOR,
+                        s=SCATTER_SIZE,
+                        marker=SCATTER_MARKER,
+                        edgecolor=SCATTER_EDGECOLOR
+                        )
 
     def addBasemapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
         # basemap_extent = gdf.total_bounds

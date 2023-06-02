@@ -35,16 +35,11 @@ print("Initializing figure and axes...")
 fig.updateAxesFromGeoDataFrame(gdf)
 print("Adjusting axes to data geometry...")
 
-sc = fig.addScatterPlotFromGeoDataFrame(gdf)
-print("Initializing scatter plot...")
-
-fig.addBasemapFromGeoDataFrame(gdf)
-print("Initializing basemap...")
-
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
     timestep_gdf = gdf[gdf['timestep'] == timestep]
-    GeoFigure.updateScatterPlotFromGeoDataFrame(sc, timestep_gdf)
+    fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
+    fig.addBasemapFromGeoDataFrame(timestep_gdf)
     end_time = time()  # Stop measuring the time
     # Calculate the elapsed time
     elapsed_time = end_time - start_time
