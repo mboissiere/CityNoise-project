@@ -1,22 +1,18 @@
-import matplotlib
-
 from src.objects.constants.geoScatterplotConstants import *
 
 
 # TODO: comment this
 
-class GeoScatterplot(matplotlib.collections.PathCollection):
-    def __init__(self, ax: matplotlib.axes.Axes):
-        super().__init__(paths=[], sizes=[], offsets=[], transOffset=ax.transData)
-        ax.add_collection(self)
-        self._marker.set_marker(SCATTER_MARKER)
-        self._facecolors = SCATTER_COLOR
-        # TODO: constant size is assumed, perhaps later size will be variable?
-        # Same thing with vehicle appearance, color... Could change...
-        self.set_sizes(SCATTER_MARKERSIZE)
-        self.set_edgecolor(SCATTER_EDGECOLORS)
+class GeoScatterplot:
+    def __init__(self, ax, gdf):
+        self.ax = ax
+        self.scatter = self.ax.scatter(gdf.geometry.x,
+                                       gdf.geometry.y,
+                                       c=SCATTER_COLOR,
+                                       s=SCATTER_SIZE,
+                                       marker=SCATTER_MARKER,
+                                       edgecolor=SCATTER_EDGECOLOR
+                                       )
 
     def updateFromGeoDataFrame(self, gdf):
-        x_column = gdf.geometry.x
-        y_column = gdf.geometry.y
-        self.set_offsets(list(zip(x_column, y_column)))
+        self.scatter.set_offsets(list(zip(gdf.geometry.x, gdf.geometry.y)))

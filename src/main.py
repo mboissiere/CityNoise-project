@@ -4,7 +4,6 @@ from src.config.projectVariables import *
 from src.objects.geoBasemap import GeoBasemap
 from src.objects.geoFigure import GeoFigure
 from src.objects.geoScatterplot import GeoScatterplot
-from src.utils.codeEmissions import *
 from src.utils.manipulateData import *
 from src.utils.simulationDirectory import *
 from src.utils.unitConversion import *
@@ -12,11 +11,11 @@ from src.utils.unitConversion import *
 simulation_folder_path = createSimulationFolder()
 print(f"Created simulation output folder: {simulation_folder_path}")
 
-tracker = initializeCarbonTracker(simulation_folder_path)
-print("Initialized carbon tracker for the running code.")
+# tracker = initializeCarbonTracker(simulation_folder_path)
+# print("Initialized carbon tracker for the running code.")
 
-tracker.start()
-print("Started tracking.")
+# tracker.start()
+# print("Started tracking.")
 
 df = importFromCSV(input_columns)
 print(f"Snapshots will be saved in {FILE_FORMAT} format under the name: {location_name}.")
@@ -33,7 +32,7 @@ print("Initializing figure...")
 ax = fig.addGeoAxes(gdf)
 print("Initializing axes...")
 
-sc = GeoScatterplot(ax)
+sc = GeoScatterplot(ax, gdf)
 print("Initializing scatter plot...")
 
 cx = GeoBasemap()
@@ -60,7 +59,7 @@ for timestep in gdf['timestep'].sort_values().unique():
 
 # Step 7: Display a message indicating the snapshots have been saved
 print("Snapshots saved successfully.")
-codeEmissions: float = tracker.stop()
-print(f"CO2eq emissions induced by code: {codeEmissions} kg")
+# codeEmissions: float = tracker.stop()
+# print(f"CO2eq emissions induced by code: {codeEmissions} kg")
 
 # Add some prints yeah. But allow them to be turned off altogether. Perhaps seperate functions into stuff like the file size truncator.
