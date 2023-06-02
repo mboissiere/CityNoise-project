@@ -3,12 +3,9 @@ from time import time
 import matplotlib
 
 matplotlib.use('WebAgg')
-import matplotlib.pyplot as plt
 
 from src.config.projectVariables import *
-from src.objects.geoBasemap import GeoBasemap
 from src.objects.geoFigure import GeoFigure
-from src.objects.geoScatterplot import GeoScatterplot
 from src.utils.constants.simulationDirectoryConstants import FILE_FORMAT
 from src.utils.manipulateData import importFromCSV, geoDataFrameFromDataFrame
 from src.utils.simulationDirectory import createSimulationFolder, saveSnapshot
@@ -33,26 +30,21 @@ gdf.to_crs(output_CRS)
 print(f"Reprojecting to: {output_CRS.name}")
 
 fig = GeoFigure()
-print("Initializing figure...")
+print("Initializing figure and axes...")
 
-ax = fig.addGeoAxes(gdf)
-print("Initializing axes...")
+fig.updateAxesFromGeoDataFrame(gdf)
+print("Adjusting axes to data geometry...")
 
-sc = GeoScatterplot(ax, gdf)
+fig.addScatterPlotFromGeoDataFrame(gdf)
 print("Initializing scatter plot...")
 
-cx = GeoBasemap()
+fig.addBasemapFromGeoDataFrame(gdf)
 print("Initializing basemap...")
-
-cx.addBasemapFromGeoDataFrame(ax, gdf)
-print("Adding basemap to axes...")
-
-plt.show()
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
     timestep_gdf = gdf[gdf['timestep'] == timestep]
-    sc.updateFromGeoDataFrame(timestep_gdf)
+    fig.updateScatterPlotFromGeoDataFrame(timestep_gdf)
     end_time = time()  # Stop measuring the time
     # Calculate the elapsed time
     elapsed_time = end_time - start_time

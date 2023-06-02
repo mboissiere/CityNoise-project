@@ -3,6 +3,8 @@ This file gathers constants (written in UPPER_SNAKE_CASE) to be called in the in
 It is possible to modify them here, but in normal execution shouldn't need to happen too often.
 """
 
+import contextily as ctx
+
 # The horizontal figure size of the plot
 FIGURE_SIZE_X = 20
 
@@ -23,3 +25,24 @@ SHOW_AXES = False
 
 # Resizing of axes - "auto" by default, can be set to 'equal' if a square aspect ratio is desired.
 AXES_ASPECT_MODE = "equal"
+
+# Size of the points or markers in a scatter plot, if it is chosen constant
+SCATTER_SIZE = 5
+
+# Color of the points in a scatter plot
+SCATTER_COLOR = "white"
+
+# Choice of marker in a scatter plot
+SCATTER_MARKER = 'o'
+
+# Choice of the markers' edge colors in a scatter plot
+SCATTER_EDGECOLOR = "black"
+
+# The source for the basemap, in the background of the plot
+BASEMAP_SOURCE = ctx.providers.OpenStreetMap.Mapnik
+
+# The value for transparency of the basemap, between 0 and 1.
+BASEMAP_ALPHA = 1
+
+# Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
+BASEMAP_ZOOM = 14
