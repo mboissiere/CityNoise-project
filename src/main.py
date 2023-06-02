@@ -30,15 +30,15 @@ print("Initializing figure and axes...")
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
+
     timestep_gdf = gdf[gdf['timestep'] == timestep]
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
-    end_time = time()  # Stop measuring the time
-    # Calculate the elapsed time
-    elapsed_time = end_time - start_time
 
-    # Print the elapsed time in seconds
+    end_time = time()
+
+    elapsed_time = end_time - start_time
     print(f"\n-= Snapshot {timestep} =-")
     print(f"Generation time: {elapsed_time:.2f} seconds")
 
@@ -46,9 +46,7 @@ for timestep in gdf['timestep'].sort_values().unique():
     file_size, unit = convertFileSize(file_size_bytes)
     print(f"File size: {file_size:.2f} {unit}")
 
-# Step 7: Display a message indicating the snapshots have been saved
 print("Snapshots saved successfully.")
+
 codeEmissions: float = tracker.stop()
 print(f"CO2eq emissions induced by code: {codeEmissions} kg")
-
-# Add some prints yeah. But allow them to be turned off altogether. Perhaps seperate functions into stuff like the file size truncator.

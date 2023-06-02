@@ -53,5 +53,4 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
     os.makedirs(snapshot_path, exist_ok=True)
     filename = f'{snapshot_path}/{location_name}_{timestep}.{FILE_FORMAT}'
     plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)
-    # plt.close()
     return os.path.getsize(filename)
