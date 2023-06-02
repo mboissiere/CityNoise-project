@@ -50,6 +50,7 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
     :rtype int:
     """
     snapshot_path = os.path.join(simulation_folder_path, SNAPSHOT_FOLDER_NAME)
+    os.makedirs(snapshot_path, exist_ok=True)
     filename = f'{snapshot_path}/{location_name}_{timestep}.{FILE_FORMAT}'
     plt.savefig(fname=filename, dpi=DPI, bbox_inches=BBOX_SETTINGS)
     plt.close()

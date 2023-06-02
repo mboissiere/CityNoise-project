@@ -8,7 +8,7 @@ class GeoScatterplot:
         self.ax = ax
         self.scatter = self.ax.scatter(gdf.geometry.x,
                                        gdf.geometry.y,
-                                       c=SCATTER_COLOR,
+                                       color=SCATTER_COLOR,
                                        s=SCATTER_SIZE,
                                        marker=SCATTER_MARKER,
                                        edgecolor=SCATTER_EDGECOLOR

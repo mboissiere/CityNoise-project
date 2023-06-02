@@ -1,12 +1,18 @@
 from time import time
 
+import matplotlib
+
+matplotlib.use('WebAgg')
+import matplotlib.pyplot as plt
+
 from src.config.projectVariables import *
 from src.objects.geoBasemap import GeoBasemap
 from src.objects.geoFigure import GeoFigure
 from src.objects.geoScatterplot import GeoScatterplot
-from src.utils.manipulateData import *
-from src.utils.simulationDirectory import *
-from src.utils.unitConversion import *
+from src.utils.constants.simulationDirectoryConstants import FILE_FORMAT
+from src.utils.manipulateData import importFromCSV, geoDataFrameFromDataFrame
+from src.utils.simulationDirectory import createSimulationFolder, saveSnapshot
+from src.utils.unitConversion import convertFileSize
 
 simulation_folder_path = createSimulationFolder()
 print(f"Created simulation output folder: {simulation_folder_path}")
@@ -40,6 +46,8 @@ print("Initializing basemap...")
 
 cx.addBasemapFromGeoDataFrame(ax, gdf)
 print("Adding basemap to axes...")
+
+plt.show()
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()

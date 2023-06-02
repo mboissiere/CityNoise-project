@@ -11,4 +11,4 @@ BASEMAP_SOURCE = ctx.providers.OpenStreetMap.Mapnik
 BASEMAP_ALPHA = 1
 
 # Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
-BASEMAP_ZOOM = 12
+BASEMAP_ZOOM = 14
