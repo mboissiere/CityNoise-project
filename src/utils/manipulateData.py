@@ -47,3 +47,9 @@ def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
     geometry = gpd.points_from_xy(df[LONGITUDE_COLUMN], df[LATITUDE_COLUMN])
     gdf = gpd.GeoDataFrame(df, geometry=geometry, crs=crs)
     return gdf
+
+
+def simulatedTimeFromGeoDataFrame(gdf: gpd.GeoDataFrame):
+    min_timestep = gdf[TIMESTEP_COLUMN].min()
+    max_timestep = gdf[TIMESTEP_COLUMN].max()
+    return max_timestep - min_timestep

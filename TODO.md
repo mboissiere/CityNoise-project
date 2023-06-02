@@ -1,3 +1,5 @@
+# COMMENT CODE THAT I SUFFERED THRU DURING REFACTORING
+
 # Objective of version 3 :
 
 # speed it up (there are probably redundancies)

@@ -1,3 +1,4 @@
+import logging
 from time import time
 
 from src.config.projectVariables import *
@@ -6,6 +7,10 @@ from src.utils.codeEmissions import *
 from src.utils.manipulateData import *
 from src.utils.simulationDirectory import *
 from src.utils.unitConversion import *
+
+logging.getLogger("moviepy").setLevel(logging.WARNING)
+logging.getLogger("codecarbon").setLevel(logging.WARNING)
+print("Disabled unimportant logging prints.")
 
 simulation_folder_path = createSimulationFolder()
 print(f"Created simulation output folder: {simulation_folder_path}")
@@ -17,7 +22,7 @@ tracker.start()
 print("Started tracking.")
 
 df = importFromCSV(input_columns)
-print(f"Snapshots will be saved in {FILE_FORMAT} format under the name: {location_name}.")
+print(f"Snapshots will be saved in {IMAGE_FILE_FORMAT} format under the name: {location_name}.")
 
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
 print(f"Data obtained in CRS: {input_CRS.name}")
@@ -30,25 +35,31 @@ print("Initializing figure and axes...")
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
+
     timestep_gdf = gdf[gdf['timestep'] == timestep]
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
-    end_time = time()  # Stop measuring the time
-    # Calculate the elapsed time
-    elapsed_time = end_time - start_time
 
-    # Print the elapsed time in seconds
+    end_time = time()
+
+    elapsed_time = end_time - start_time
     print(f"\n-= Snapshot {timestep} =-")
     print(f"Generation time: {elapsed_time:.2f} seconds")
 
     file_size_bytes = saveSnapshot(simulation_folder_path, timestep)
-    file_size, unit = convertFileSize(file_size_bytes)
-    print(f"File size: {file_size:.2f} {unit}")
+    file_size, file_size_unit = convertFileSize(file_size_bytes)
+    print(f"File size: {file_size:.2f} {file_size_unit}")
 
-# Step 7: Display a message indicating the snapshots have been saved
-print("Snapshots saved successfully.")
+print("\nSnapshots saved.")
+
+simulated_time_seconds = simulatedTimeFromGeoDataFrame(gdf)
+simulated_time, time_unit = convertTime(simulated_time_seconds)
+print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {location_name}.\n")
+
+video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
+assembleVideo(simulation_folder_path, video_name)
+print(f"\nGenerated video under filename: {video_name}")
+
 codeEmissions: float = tracker.stop()
 print(f"CO2eq emissions induced by code: {codeEmissions} kg")
-
-# Add some prints yeah. But allow them to be turned off altogether. Perhaps seperate functions into stuff like the file size truncator.
