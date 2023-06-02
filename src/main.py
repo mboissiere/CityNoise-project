@@ -1,24 +1,20 @@
 from time import time
 
-import matplotlib
-
-matplotlib.use('WebAgg')
-
 from src.config.projectVariables import *
 from src.objects.geoFigure import *
-from src.utils.constants.simulationDirectoryConstants import FILE_FORMAT
-from src.utils.manipulateData import importFromCSV, geoDataFrameFromDataFrame
-from src.utils.simulationDirectory import createSimulationFolder, saveSnapshot
-from src.utils.unitConversion import convertFileSize
+from src.utils.codeEmissions import *
+from src.utils.manipulateData import *
+from src.utils.simulationDirectory import *
+from src.utils.unitConversion import *
 
 simulation_folder_path = createSimulationFolder()
 print(f"Created simulation output folder: {simulation_folder_path}")
 
-# tracker = initializeCarbonTracker(simulation_folder_path)
-# print("Initialized carbon tracker for the running code.")
+tracker = initializeCarbonTracker(simulation_folder_path)
+print("Initialized carbon tracker for the running code.")
 
-# tracker.start()
-# print("Started tracking.")
+tracker.start()
+print("Started tracking.")
 
 df = importFromCSV(input_columns)
 print(f"Snapshots will be saved in {FILE_FORMAT} format under the name: {location_name}.")
@@ -52,7 +48,7 @@ for timestep in gdf['timestep'].sort_values().unique():
 
 # Step 7: Display a message indicating the snapshots have been saved
 print("Snapshots saved successfully.")
-# codeEmissions: float = tracker.stop()
-# print(f"CO2eq emissions induced by code: {codeEmissions} kg")
+codeEmissions: float = tracker.stop()
+print(f"CO2eq emissions induced by code: {codeEmissions} kg")
 
 # Add some prints yeah. But allow them to be turned off altogether. Perhaps seperate functions into stuff like the file size truncator.

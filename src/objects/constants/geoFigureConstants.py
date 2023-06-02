@@ -41,6 +41,9 @@ SCATTER_EDGECOLOR = "black"
 # Choice of the markers' edge size in a scatter plot
 SCATTER_LINEWIDTH = 0.5
 
+# Car icon, if one wants to make a scatter plot with car markers
+CAR_ICON_PATH = "../view/car_16px.png"
+
 # The source for the basemap, in the background of the plot
 BASEMAP_SOURCE = ctx.providers.OpenStreetMap.Mapnik
 
@@ -49,3 +52,9 @@ BASEMAP_ALPHA = 1
 
 # Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
 BASEMAP_ZOOM = 14
+
+# The colormap most appropriate for visualization
+COLORMAP = "YlOrRd"
+
+# How much the colorbar should be shrinked, for purely visualization purposes.
+COLORBAR_SHRINK = 0.5
