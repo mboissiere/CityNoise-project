@@ -1,7 +1,6 @@
 from time import time
 
 from src.config.projectVariables import *
-from src.objects.geoAxes import GeoAxes
 from src.objects.geoBasemap import GeoBasemap
 from src.objects.geoFigure import GeoFigure
 from src.objects.geoScatterplot import GeoScatterplot
@@ -31,7 +30,7 @@ print(f"Reprojecting to: {output_CRS.name}")
 fig = GeoFigure()
 print("Initializing figure...")
 
-ax = GeoAxes(fig, gdf)
+ax = fig.addGeoAxes(gdf)
 print("Initializing axes...")
 
 sc = GeoScatterplot(ax)
