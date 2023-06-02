@@ -4,8 +4,9 @@ This module configures the output folder of a simulation, and contains helper fu
 import os
 from datetime import datetime
 
-import imageio
 import matplotlib.pyplot as plt
+from moviepy.editor import ImageSequenceClip
+from moviepy.video.compositing.concatenate import concatenate_videoclips
 
 from src.config.projectVariables import location_name
 from src.utils.constants.simulationDirectoryConstants import *
@@ -59,11 +60,9 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
 
 def assembleVideo(simulation_folder_path: str, output_video_name: str):
     snapshot_folder_path = os.path.join(simulation_folder_path, SNAPSHOT_FOLDER_NAME)
-    snapshots = sorted([file for file in os.listdir(snapshot_folder_path) if file.endswith(IMAGE_FILE_FORMAT)])
-    frames = []
-    for snapshot in snapshots:
-        snapshot_path = os.path.join(snapshot_folder_path, snapshot)
-        image = imageio.imread(snapshot_path)
-        frames.append(image)
+    snapshot_names = sorted([file for file in os.listdir(snapshot_folder_path) if file.endswith(IMAGE_FILE_FORMAT)])
+    snapshot_paths = [os.path.join(snapshot_folder_path, snapshot_name) for snapshot_name in snapshot_names]
+    image_clips = [ImageSequenceClip([snapshot_path], fps=FRAMES_PER_SECOND) for snapshot_path in snapshot_paths]
+    final_clip = concatenate_videoclips(image_clips)
     output_video_path = os.path.join(simulation_folder_path, output_video_name)
-    imageio.mimsave(output_video_path, frames, fps=FRAMES_PER_SECOND)
+    final_clip.write_videofile(output_video_path, codec=VIDEO_CODEC)

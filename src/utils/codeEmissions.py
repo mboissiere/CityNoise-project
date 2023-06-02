@@ -11,5 +11,6 @@ def initializeCarbonTracker(output_directory: str):
     """
     tracker = codecarbon.OfflineEmissionsTracker(country_iso_code=COUNTRY_ISO_CODE,
                                                  output_dir=output_directory,
-                                                 output_file=OUTPUT_FILE_NAME)
+                                                 output_file=OUTPUT_FILE_NAME,
+                                                 log_level="warning")
     return tracker
