@@ -32,6 +32,18 @@ def importFromCSV(columns: list):
     return df
 
 
+def initializeAccumulationDataFrame(df: pd.DataFrame, columns: list):
+    df.sort_values(TIMESTEP_COLUMN)
+    accumulation_df = df.drop_duplicates([LONGITUDE_COLUMN, LATITUDE_COLUMN])
+    accumulation_columns = list()
+    for column in columns:
+        accumulation_df[f'accumulated_{column}'] = 0
+        accumulation_columns.append(f'accumulated_{column}')
+    accumulation_df = accumulation_df[[LONGITUDE_COLUMN, LATITUDE_COLUMN].extend(accumulation_columns)]
+    accumulation_df = accumulation_df.reset_index(drop=True)
+    return accumulation_df
+
+
 def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
     """
     This function converts a Pandas DataFrame object into a GeoPandas GeoDataFrame object,
