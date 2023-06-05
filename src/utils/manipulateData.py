@@ -32,14 +32,15 @@ def importFromCSV(columns: list):
     return df
 
 
-def initializeAccumulationDataFrame(df: pd.DataFrame, columns: list):
+def initializeAccumulationDataFrame(df: pd.DataFrame, columns_of_interest: list):
     df.sort_values(TIMESTEP_COLUMN)
     accumulation_df = df.drop_duplicates([LONGITUDE_COLUMN, LATITUDE_COLUMN])
     accumulation_columns = list()
-    for column in columns:
+    for column in columns_of_interest:
         accumulation_df[f'accumulated_{column}'] = 0
         accumulation_columns.append(f'accumulated_{column}')
     accumulation_df = accumulation_df[[LONGITUDE_COLUMN, LATITUDE_COLUMN].extend(accumulation_columns)]
+    accumulation_df = accumulation_df.sort_values([LONGITUDE_COLUMN, LATITUDE_COLUMN])
     accumulation_df = accumulation_df.reset_index(drop=True)
     return accumulation_df
 
@@ -59,6 +60,28 @@ def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
     geometry = gpd.points_from_xy(df[LONGITUDE_COLUMN], df[LATITUDE_COLUMN])
     gdf = gpd.GeoDataFrame(df, geometry=geometry, crs=crs)
     return gdf
+
+
+def obtainGeoDataFromTimeStep(gdf: gpd.GeoDataFrame, timestep: int, columns_of_interest: list):
+    timestep_gdf = gdf.loc[
+        gdf[TIMESTEP_COLUMN] == timestep, [LONGITUDE_COLUMN, LATITUDE_COLUMN].extend(columns_of_interest)]
+    return timestep_gdf
+
+
+def indexGeoDataFrameWithLonLat(gdf: gpd.GeoDataFrame):
+    gdf.reset_index(inplace=True)
+    gdf.set_index([LONGITUDE_COLUMN, LATITUDE_COLUMN], inplace=True)
+
+
+def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
+                                        timestep_gdf: gpd.GeoDataFrame,
+                                        columns_of_interest: list):
+    # assumes sorted
+    # NB : in refactoring, make it so it's clear what the columns of interest are : gases set in project variables
+    # and never touched again.
+    # NB : this function is funky and crucial and should be tested.
+    for column in columns_of_interest:
+        accumulation_gdf.loc[timestep_gdf.index, f'accumulated_{column}'] += timestep_gdf[column].values
 
 
 def simulatedTimeFromGeoDataFrame(gdf: gpd.GeoDataFrame):
