@@ -73,6 +73,8 @@ for timestep in gdf['timestep'].sort_values().unique():
     # and options in "Pandas plots" section of URL
     # Good example of KDEplot and pointplot mixing :
     # https://residentmario.github.io/geoplot/gallery/plot_boston_airbnb_kde.html
+    # Investigate geoplot as a module : https://residentmario.github.io/geoplot/
+    # (perhaps make several implementations? idk)
     fig.createHeatMapFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
 
     end_time = time()
