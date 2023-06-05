@@ -39,7 +39,9 @@ def initializeAccumulationDataFrame(df: pd.DataFrame, columns_of_interest: list)
     for column in columns_of_interest:
         accumulation_df[f'accumulated_{column}'] = 0
         accumulation_columns.append(f'accumulated_{column}')
-    accumulation_df = accumulation_df[[LONGITUDE_COLUMN, LATITUDE_COLUMN].extend(accumulation_columns)]
+    column_list = [LONGITUDE_COLUMN, LATITUDE_COLUMN]
+    column_list.extend(accumulation_columns)
+    accumulation_df = accumulation_df[column_list]
     accumulation_df = accumulation_df.sort_values([LONGITUDE_COLUMN, LATITUDE_COLUMN])
     accumulation_df = accumulation_df.reset_index(drop=True)
     return accumulation_df
@@ -63,8 +65,10 @@ def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
 
 
 def obtainGeoDataFromTimeStep(gdf: gpd.GeoDataFrame, timestep: int, columns_of_interest: list):
+    columns = [LONGITUDE_COLUMN, LATITUDE_COLUMN]
+    columns.extend(columns_of_interest)
     timestep_gdf = gdf.loc[
-        gdf[TIMESTEP_COLUMN] == timestep, [LONGITUDE_COLUMN, LATITUDE_COLUMN].extend(columns_of_interest)]
+        gdf[TIMESTEP_COLUMN] == timestep, columns]
     return timestep_gdf
 
 

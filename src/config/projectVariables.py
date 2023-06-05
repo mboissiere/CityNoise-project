@@ -16,3 +16,6 @@ input_CRS = CRS.from_epsg(EPSG_WORLD_GEODESIC_SYSTEM)
 
 # EPSG identifier of the output CRS desired in case of reprojection
 output_CRS = CRS.from_epsg(EPSG_PSEUDO_MERCATOR)
+
+# Enable/disable code's tracking of emissions by codecarbon
+codecarbon_enabled = False

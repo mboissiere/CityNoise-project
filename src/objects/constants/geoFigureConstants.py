@@ -56,5 +56,8 @@ BASEMAP_ZOOM = 14
 # The colormap most appropriate for visualization
 COLORMAP = "YlOrRd"
 
+# The value for transparency of the heatmap, between 0 and 1.
+HEATMAP_ALPHA = 0.8
+
 # How much the colorbar should be shrinked, for purely visualization purposes.
 COLORBAR_SHRINK = 0.5

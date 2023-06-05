@@ -1,5 +1,6 @@
 import geopandas
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from src.objects.constants.geoFigureConstants import *
 
@@ -20,9 +21,20 @@ class GeoFigure:
         self.ax = gdf.plot(color=SCATTER_COLOR,
                            marker=SCATTER_MARKER,
                            markersize=SCATTER_MARKERSIZE,
-                           edgecolor=SCATTER_EDGECOLOR,
+                           # edgecolor=SCATTER_EDGECOLOR,
                            linewidth=SCATTER_LINEWIDTH
                            )
+
+    def createHeatMapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
+        # TODO: very probably adapt for multiple columns if I don't do CO2eq
+        colormap = sns.color_palette(COLORMAP, as_cmap=True)
+        colormap.set_under(alpha=0.0)
+        sns.heatmap(gdf[column],
+                    cmap=colormap,
+                    # cbar_kws={"shrink": 0.7, "vmin": 0, "vmax": 100}
+                    alpha=HEATMAP_ALPHA,
+                    vmin=0,  # np.nextafter(0, 1)
+                    ax=self.ax)
 
     def addBasemapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
         # basemap_extent = gdf.total_bounds
