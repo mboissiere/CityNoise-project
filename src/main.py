@@ -41,7 +41,7 @@ print(f"Re-projecting to: {output_CRS.name}")
 fig = GeoFigure()
 print("Initializing figure and axes...")
 
-indexGeoDataFrameWithLonLat(accumulation_gdf)
+indexGeoDataFrameWithGeometry(accumulation_gdf)
 print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
 
 for timestep in gdf['timestep'].sort_values().unique():
@@ -52,13 +52,27 @@ for timestep in gdf['timestep'].sort_values().unique():
                                              columns_of_interest=input_columns
                                              )'''
     timestep_gdf = gdf[gdf[TIMESTEP_COLUMN] == timestep]
-    print(timestep_gdf.crs)
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
-
-    indexGeoDataFrameWithLonLat(timestep_gdf)
+    print("-= Before =-")
+    print(timestep_gdf)
+    indexGeoDataFrameWithGeometry(timestep_gdf)
+    print("-= After =-")
+    print(timestep_gdf)
+    print("-= Before =-")
+    print(accumulation_gdf)
     addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
+    print("-= After =-")
+    print(accumulation_gdf)
+    print(accumulation_gdf['accumulated_CO2'].sort_values())
+    # Note for tomorrow : for now I see no other way than to create a np meshgrid.
+    # Seaborn doesn't seem to recognize geometry when plotting.
+    # OR try geopandas mapping functions directly : https://geopandas.org/en/stable/docs/user_guide/mapping.html
+    # Before giving up (although controlling meshgrid could turn out to be good), try KDE plot
+    # and options in "Pandas plots" section of URL
+    # Good example of KDEplot and pointplot mixing :
+    # https://residentmario.github.io/geoplot/gallery/plot_boston_airbnb_kde.html
     fig.createHeatMapFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
 
     end_time = time()

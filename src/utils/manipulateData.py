@@ -72,9 +72,14 @@ def obtainGeoDataFromTimeStep(gdf: gpd.GeoDataFrame, timestep: int, columns_of_i
     return timestep_gdf
 
 
-def indexGeoDataFrameWithLonLat(gdf: gpd.GeoDataFrame):
+def indexDataFrameWithLonLat(df: pd.DataFrame):
+    df.reset_index(inplace=True)
+    df.set_index([LONGITUDE_COLUMN, LATITUDE_COLUMN], inplace=True)
+
+
+def indexGeoDataFrameWithGeometry(gdf: gpd.GeoDataFrame):
     gdf.reset_index(inplace=True)
-    gdf.set_index([LONGITUDE_COLUMN, LATITUDE_COLUMN], inplace=True)
+    gdf.set_index(GEOMETRY_COLUMN, inplace=True)
 
 
 def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
