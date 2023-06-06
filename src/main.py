@@ -55,11 +55,12 @@ for timestep in gdf['timestep'].sort_values().unique():
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
     # indexGeoDataFrameWithGeometry(timestep_gdf)
-    addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
+    accumulation_gdf = addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
+    # print(accumulation_gdf)
     # print(accumulation_gdf.columns)
     # print(accumulation_gdf.dtypes)
     fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
-
+    # print("kdeplot")
     end_time = time()
 
     elapsed_time = end_time - start_time
@@ -71,6 +72,10 @@ for timestep in gdf['timestep'].sort_values().unique():
     print(f"File size: {file_size:.2f} {file_size_unit}")
 
 print("\nSnapshots saved.")
+
+# To comment
+csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')
+accumulation_gdf.to_csv(csv_filename)
 
 simulated_time_seconds = simulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)

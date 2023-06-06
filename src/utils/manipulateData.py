@@ -69,6 +69,8 @@ def initializeAccumulationGeoDataFrame(gdf: gpd.GeoDataFrame, columns_of_interes
     accumulation_df = initializeAccumulationDataFrame(gdf,
                                                       columns_of_interest)  # reprojection must have already been done!
     accumulation_gdf = geoDataFrameFromDataFrame(accumulation_df, crs)
+    # NB : currently i am destroying and recreating latitudes x and y everytime,
+    # perhaps can refactor by keeping longitude and latitude oclumns that i then parse to seaborn kdeplot
     new_columns = ['geometry']
     accumulated_columns = [f"accumulated_{column}" for column in columns_of_interest]
     new_columns.extend(accumulated_columns)
@@ -103,8 +105,6 @@ def indexGeoDataFrameWithGeometry(gdf: gpd.GeoDataFrame):
 def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
                                         timestep_gdf: gpd.GeoDataFrame,
                                         columns_of_interest: list):
-    # should probably do the reindexing of timestep_gdf here!!
-
     # assumes sorted
     # NB : in refactoring, make it so it's clear what the columns of interest are : gases set in project variables
     # and never touched again.
@@ -112,15 +112,12 @@ def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
 
     # this attempt : merges and unmerges
     merged_gdf = accumulation_gdf.merge(timestep_gdf, on='geometry', how='left')
-    # print(merged_gdf[['longitude_x', 'longitude_y', 'geometry']])
-    # print(merged_gdf.columns)
     for column in columns_of_interest:
         merged_gdf[f'accumulated_{column}'] += merged_gdf[column].fillna(0)
+    # print(merged_gdf)
     accumulation_gdf = merged_gdf[accumulation_gdf.columns]
-
-    '''for column in columns_of_interest:
-        accumulation_gdf.loc[timestep_gdf.index, f'accumulated_{column}'] += timestep_gdf[column].values
-'''
+    # print(accumulation_gdf)
+    return accumulation_gdf
 
 
 def simulatedTimeFromGeoDataFrame(gdf: gpd.GeoDataFrame):

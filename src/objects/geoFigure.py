@@ -24,31 +24,48 @@ class GeoFigure:
                            markersize=SCATTER_MARKERSIZE,
                            edgecolor=SCATTER_EDGECOLOR,
                            linewidth=SCATTER_LINEWIDTH,
-                           zorder=2
+                           zorder=3
                            )
 
+    '''PONCER:
+    - KDE avec fill et vmin/vmax qui marchent bien
+    - 2D histogram pour le truc dynamique qui peut être rapide, quitte à ce que ce soit un project variable
+    de choisir entre les deux modélisations
+    - proposition de newt :d onner le nombre de bins sur histogramme c'est donner la résolution.
+    pour une visualization bien, se poser la question de quelle valeur à donner
+    bins : façon de subdiviser sur les côtés les points de l'histogramme
+    - mesh grid avec les routes de sodermalm ?'''
+
     def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
-        '''kde_ax = sns.kdeplot(data=gdf[column],
-                             x=gdf.geometry.x,
-                             y=gdf.geometry.y,
-                             cmap=COLORMAP,
-                             ax=self.ax,
-                             shade=True,
-                             shade_lowest=False,
-                             cbar=True
-                             )'''
+        sns.kdeplot(x=gdf.geometry.x,  # ah ptn le nom de la colonne
+                    y=gdf.geometry.y,
+                    weights=gdf[column],
+                    cmap=COLORMAP,
+                    ax=self.ax
+                    # shade=True,
+                    # shade_lowest=False,
+                    # cbar=True
+                    )
+
+        # NB:  might work, but might just be extremely long..
+        # KDEmap could be maybe useful but only at the end of the computation, as a bonus after the animation like CSV
+
         # self.ax = kde_ax
         # plt.colorbar(kde_ax.collections[0], ax=kde_ax)
         # print(f"KDE gdf: {gdf}")
-        self.ax = gdf.plot(column=column,
-                           x=gdf.geometry.x,
-                           y=gdf.geometry.y,
+
+        # try seaborn again
+        # KJBHdskjhdsliuvhdsovhfidshi use geoplot maybe
+
+        '''self.ax = gdf.plot(column=column,
+                           # x=gdf.geometry.x,
+                           # y=gdf.geometry.y,
                            kind="kde",
                            cmap=COLORMAP,
-                           legend=True,
+                           # legend=True,
                            ax=self.ax,
-                           zorder=1
-                           )
+                           zorder=2
+                           )'''
 
     def createHeatMapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
         # TODO: very probably adapt for multiple columns if I don't do CO2eq
@@ -59,7 +76,11 @@ class GeoFigure:
                     # cbar_kws={"shrink": 0.7, "vmin": 0, "vmax": 100}
                     alpha=HEATMAP_ALPHA,
                     vmin=0,  # np.nextafter(0, 1)
-                    ax=self.ax)
+                    ax=self.ax
+                    )
+
+        # apparently heatmap is not at all what i need ! but in fact should try a 2D histogram.
+
         # Note for tomorrow : for now I see no other way than to create a np meshgrid.
         # Seaborn doesn't seem to recognize geometry when plotting.
         # OR try geopandas mapping functions directly : https://geopandas.org/en/stable/docs/user_guide/mapping.html
@@ -80,4 +101,6 @@ class GeoFigure:
                         # extent=basemap_extent,
                         source=BASEMAP_SOURCE,
                         alpha=BASEMAP_ALPHA,
-                        zoom=BASEMAP_ZOOM)
+                        zoom=BASEMAP_ZOOM,
+                        zorder=1
+                        )
