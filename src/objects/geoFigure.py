@@ -21,9 +21,23 @@ class GeoFigure:
         self.ax = gdf.plot(color=SCATTER_COLOR,
                            marker=SCATTER_MARKER,
                            markersize=SCATTER_MARKERSIZE,
-                           # edgecolor=SCATTER_EDGECOLOR,
+                           edgecolor=SCATTER_EDGECOLOR,
                            linewidth=SCATTER_LINEWIDTH
                            )
+
+    def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
+        kde_ax = sns.kdeplot(data=gdf[column],
+                             cmap=COLORMAP,
+                             ax=self.ax,
+                             shade=True,
+                             shade_lowest=False,
+                             cbar=True
+                             )
+        self.ax = kde_ax
+        '''self.ax = gdf.plot(column=column,
+                           kind="kde",
+                           cmap=COLORMAP
+                           )'''
 
     def createHeatMapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
         # TODO: very probably adapt for multiple columns if I don't do CO2eq
@@ -35,6 +49,18 @@ class GeoFigure:
                     alpha=HEATMAP_ALPHA,
                     vmin=0,  # np.nextafter(0, 1)
                     ax=self.ax)
+        # Note for tomorrow : for now I see no other way than to create a np meshgrid.
+        # Seaborn doesn't seem to recognize geometry when plotting.
+        # OR try geopandas mapping functions directly : https://geopandas.org/en/stable/docs/user_guide/mapping.html
+
+    # Before giving up (although controlling meshgrid could turn out to be good), try KDE plot
+    # and options in "Pandas plots" section of URL
+    # Good example of KDEplot and pointplot mixing :
+    # https://residentmario.github.io/geoplot/gallery/plot_boston_airbnb_kde.html
+    # Investigate geoplot as a module : https://residentmario.github.io/geoplot/
+    # (perhaps make several implementations? idk)
+
+    # TODO: consider geoplot in a potential refactoring, but not sure if needed rn
 
     def addBasemapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
         # basemap_extent = gdf.total_bounds

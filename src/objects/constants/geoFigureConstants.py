@@ -27,7 +27,7 @@ SHOW_AXES = False
 AXES_ASPECT_MODE = "equal"
 
 # Size of the points or markers in a scatter plot, if it is chosen constant
-SCATTER_MARKERSIZE = 3
+SCATTER_MARKERSIZE = 2
 
 # Color of the points in a scatter plot
 SCATTER_COLOR = "white"
