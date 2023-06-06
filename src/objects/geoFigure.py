@@ -34,6 +34,7 @@ class GeoFigure:
                              cbar=True
                              )
         self.ax = kde_ax
+        # plt.colorbar(kde_ax.collections[0], ax=kde_ax)
         '''self.ax = gdf.plot(column=column,
                            kind="kde",
                            cmap=COLORMAP
