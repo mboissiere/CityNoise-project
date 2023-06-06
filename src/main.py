@@ -27,21 +27,19 @@ if codecarbon_enabled:
 df = importFromCSV(input_columns)
 print(f"Snapshots will be saved in {IMAGE_FILE_FORMAT} format under the name: {location_name}.")
 
-accumulation_df = initializeAccumulationDataFrame(df, input_columns)
-print(f"Initialized accumulation dataframes for columns : {input_columns}")
-
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
-accumulation_gdf = geoDataFrameFromDataFrame(accumulation_df, input_CRS)
 print(f"Data obtained in CRS: {input_CRS.name}")
 
 gdf.to_crs(output_CRS)
-accumulation_gdf.to_crs(output_CRS)
 print(f"Re-projecting to: {output_CRS.name}")
+
+accumulation_gdf = initializeAccumulationGeoDataFrame(gdf, input_columns, output_CRS)
+print(f"Initialized accumulation dataframes for columns : {input_columns}")
 
 fig = GeoFigure()
 print("Initializing figure and axes...")
 
-indexGeoDataFrameWithGeometry(accumulation_gdf)
+# indexGeoDataFrameWithGeometry(accumulation_gdf)
 # print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
 # print(accumulation_gdf.columns)
 
@@ -56,8 +54,10 @@ for timestep in gdf['timestep'].sort_values().unique():
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
-    indexGeoDataFrameWithGeometry(timestep_gdf)
+    # indexGeoDataFrameWithGeometry(timestep_gdf)
     addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
+    # print(accumulation_gdf.columns)
+    # print(accumulation_gdf.dtypes)
     fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
 
     end_time = time()

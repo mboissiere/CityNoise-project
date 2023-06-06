@@ -18,11 +18,13 @@ class GeoFigure:
             self.ax.set_axis_off()
 
     def createScatterPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
+        # print(f"Scatter gdf: {gdf}") NB : honestly, not optimized...
         self.ax = gdf.plot(color=SCATTER_COLOR,
                            marker=SCATTER_MARKER,
                            markersize=SCATTER_MARKERSIZE,
                            edgecolor=SCATTER_EDGECOLOR,
-                           linewidth=SCATTER_LINEWIDTH
+                           linewidth=SCATTER_LINEWIDTH,
+                           zorder=2
                            )
 
     def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
@@ -37,11 +39,15 @@ class GeoFigure:
                              )'''
         # self.ax = kde_ax
         # plt.colorbar(kde_ax.collections[0], ax=kde_ax)
+        # print(f"KDE gdf: {gdf}")
         self.ax = gdf.plot(column=column,
                            x=gdf.geometry.x,
                            y=gdf.geometry.y,
                            kind="kde",
-                           cmap=COLORMAP
+                           cmap=COLORMAP,
+                           legend=True,
+                           ax=self.ax,
+                           zorder=1
                            )
 
     def createHeatMapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):

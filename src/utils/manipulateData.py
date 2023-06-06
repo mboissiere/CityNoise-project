@@ -64,6 +64,19 @@ def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
     return gdf
 
 
+def initializeAccumulationGeoDataFrame(gdf: gpd.GeoDataFrame, columns_of_interest: list, crs: CRS):
+    # refactor: maybe have a function that adds "accumulated_" tag automatically to list
+    accumulation_df = initializeAccumulationDataFrame(gdf,
+                                                      columns_of_interest)  # reprojection must have already been done!
+    accumulation_gdf = geoDataFrameFromDataFrame(accumulation_df, crs)
+    new_columns = ['geometry']
+    accumulated_columns = [f"accumulated_{column}" for column in columns_of_interest]
+    new_columns.extend(accumulated_columns)
+    # accumulation_gdf.drop([LONGITUDE_COLUMN, LATITUDE_COLUMN])  its ok bc of geometry column
+    accumulation_gdf = accumulation_gdf[new_columns]
+    return accumulation_gdf
+
+
 def obtainGeoDataFromTimeStep(gdf: gpd.GeoDataFrame, timestep: int, columns_of_interest: list):
     columns = [LONGITUDE_COLUMN, LATITUDE_COLUMN]
     columns.extend(columns_of_interest)
@@ -72,7 +85,7 @@ def obtainGeoDataFromTimeStep(gdf: gpd.GeoDataFrame, timestep: int, columns_of_i
     return timestep_gdf
 
 
-def indexDataFrameWithLonLat(df: pd.DataFrame):
+"""def indexDataFrameWithLonLat(df: pd.DataFrame):
     df.reset_index(inplace=True)
     df.set_index([LONGITUDE_COLUMN, LATITUDE_COLUMN], inplace=True)
 
@@ -84,6 +97,7 @@ def indexGeoDataFrameWithGeometry(gdf: gpd.GeoDataFrame):
     gdf.set_geometry
     # oh god probably all of my code is catastrophic and i just
     # still do not append accumulation data properly and also mess up the geometry
+    """
 
 
 def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
@@ -95,8 +109,18 @@ def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
     # NB : in refactoring, make it so it's clear what the columns of interest are : gases set in project variables
     # and never touched again.
     # NB : this function is funky and crucial and should be tested.
+
+    # this attempt : merges and unmerges
+    merged_gdf = accumulation_gdf.merge(timestep_gdf, on='geometry', how='left')
+    # print(merged_gdf[['longitude_x', 'longitude_y', 'geometry']])
+    # print(merged_gdf.columns)
     for column in columns_of_interest:
+        merged_gdf[f'accumulated_{column}'] += merged_gdf[column].fillna(0)
+    accumulation_gdf = merged_gdf[accumulation_gdf.columns]
+
+    '''for column in columns_of_interest:
         accumulation_gdf.loc[timestep_gdf.index, f'accumulated_{column}'] += timestep_gdf[column].values
+'''
 
 
 def simulatedTimeFromGeoDataFrame(gdf: gpd.GeoDataFrame):
