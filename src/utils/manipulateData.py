@@ -78,13 +78,19 @@ def indexDataFrameWithLonLat(df: pd.DataFrame):
 
 
 def indexGeoDataFrameWithGeometry(gdf: gpd.GeoDataFrame):
+    geometry = gdf.geometry
     gdf.reset_index(inplace=True)
     gdf.set_index(GEOMETRY_COLUMN, inplace=True)
+    gdf.set_geometry
+    # oh god probably all of my code is catastrophic and i just
+    # still do not append accumulation data properly and also mess up the geometry
 
 
 def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
                                         timestep_gdf: gpd.GeoDataFrame,
                                         columns_of_interest: list):
+    # should probably do the reindexing of timestep_gdf here!!
+
     # assumes sorted
     # NB : in refactoring, make it so it's clear what the columns of interest are : gases set in project variables
     # and never touched again.

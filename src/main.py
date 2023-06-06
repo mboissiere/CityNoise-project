@@ -42,7 +42,8 @@ fig = GeoFigure()
 print("Initializing figure and axes...")
 
 indexGeoDataFrameWithGeometry(accumulation_gdf)
-print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
+# print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
+# print(accumulation_gdf.columns)
 
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
@@ -55,17 +56,8 @@ for timestep in gdf['timestep'].sort_values().unique():
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
-    # print("-= Before =-")
-    # print(timestep_gdf)
     indexGeoDataFrameWithGeometry(timestep_gdf)
-    # print("-= After =-")
-    # print(timestep_gdf)
-    # print("-= Before =-")
-    # print(accumulation_gdf)
     addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
-    # print("-= After =-")
-    # print(accumulation_gdf)
-    # print(accumulation_gdf['accumulated_CO2'].sort_values())
     fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
 
     end_time = time()

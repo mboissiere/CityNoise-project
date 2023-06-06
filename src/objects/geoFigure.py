@@ -26,19 +26,23 @@ class GeoFigure:
                            )
 
     def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
-        kde_ax = sns.kdeplot(data=gdf[column],
+        '''kde_ax = sns.kdeplot(data=gdf[column],
+                             x=gdf.geometry.x,
+                             y=gdf.geometry.y,
                              cmap=COLORMAP,
                              ax=self.ax,
                              shade=True,
                              shade_lowest=False,
                              cbar=True
-                             )
-        self.ax = kde_ax
+                             )'''
+        # self.ax = kde_ax
         # plt.colorbar(kde_ax.collections[0], ax=kde_ax)
-        '''self.ax = gdf.plot(column=column,
+        self.ax = gdf.plot(column=column,
+                           x=gdf.geometry.x,
+                           y=gdf.geometry.y,
                            kind="kde",
                            cmap=COLORMAP
-                           )'''
+                           )
 
     def createHeatMapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
         # TODO: very probably adapt for multiple columns if I don't do CO2eq
