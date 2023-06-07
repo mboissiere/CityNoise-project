@@ -66,7 +66,20 @@ COLORMAP = "YlOrRd"
 KDE_ALPHA = 0.5
 
 # Order of the KDE plot in the z-plane : the higher the number, the closer to the front
-KDE_ZORDER = 3
+KDE_ZORDER = 2
+
+# Order of the 2D histogram in the z-plane : the higher the number, the closer to the front
+HISTOGRAM_ZORDER = 2
+
+# Number of bins in the x space for histogram (YEAH OK THIS ISNT CLEAR/USEFUL COMPARED TO THE VARIABLE ILL CHANGE MY MIND LATER)
+HISTOGRAM_XBINS = 200
+
+# TODO: make a custom "auto" setting that just uses figure size to determine something ok
+
+# same for y bro
+HISTOGRAM_YBINS = 100
+
+HISTOGRAM_ALPHA = 0.75
 
 # How much the colorbar should be shrinked, for purely visualization purposes.
 COLORBAR_SHRINK = 0.5

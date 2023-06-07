@@ -10,7 +10,7 @@ OUTPUT_STANDARD = "../output"
 SNAPSHOT_FOLDER_NAME = "snapshots"
 
 # Image file format is jpg by default. Can be png, but be aware file sizes can get quite large for not much benefit.
-IMAGE_FILE_FORMAT = "jpg"
+IMAGE_FILE_FORMAT = "png"
 
 # Image resolution
 DPI = 300

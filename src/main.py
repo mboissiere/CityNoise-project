@@ -47,6 +47,7 @@ CO2_max = getPointMaximumFromGeoDataFrame(gdf=gdf, column='CO2')
 
 print("\nInitialization complete! Beginning simulation loop.")
 for timestep in gdf['timestep'].sort_values().unique():
+    # todo: measure global time as well as individual. also, count saving of snapshot
     start_time = time()
 
     '''timestep_gdf = obtainGeoDataFromTimeStep(gdf=gdf,
@@ -57,24 +58,30 @@ for timestep in gdf['timestep'].sort_values().unique():
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     fig.addBasemapFromGeoDataFrame(timestep_gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
-    # indexGeoDataFrameWithGeometry(timestep_gdf)
     accumulation_gdf = addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
-    # print(accumulation_gdf)
-    # print(accumulation_gdf.columns)
-    # print(accumulation_gdf.dtypes)
-    fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', CO2_max)  # to generalize
-    # print("kdeplot")
+
+    if plot_type == "KDE":
+        fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
+    elif plot_type == "Histogram":
+        fig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')
+
     end_time = time()
 
     elapsed_time = end_time - start_time
     print(f"\n-= Snapshot {timestep} =-")
     print(f"Generation time: {elapsed_time:.2f} seconds")
 
+    # todo: refactor savesnapshot honestly its weird for it to include file size
     file_size_bytes = saveSnapshot(simulation_folder_path, timestep)
     file_size, file_size_unit = convertFileSize(file_size_bytes)
     print(f"File size: {file_size:.2f} {file_size_unit}")
 
-print("\nSnapshots saved.")
+print(f"\n{plot_type} snapshots saved.")
+
+fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')
+file_size_bytes = saveSnapshot(simulation_folder_path, timestep)
+file_size, file_size_unit = convertFileSize(file_size_bytes)
+print(f"\nEnd state KDE snapshot saved ({file_size:.2f} {file_size_unit})")
 
 # To comment
 csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')

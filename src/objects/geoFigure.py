@@ -1,6 +1,7 @@
 import geopandas
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 from src.objects.constants.geoFigureConstants import *
 
@@ -36,7 +37,11 @@ class GeoFigure:
     bins : façon de subdiviser sur les côtés les points de l'histogramme
     - mesh grid avec les routes de sodermalm ?'''
 
-    def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str, column_max: float):
+    def createKDEPlotFromGeoDataFrame(self,
+                                      gdf: geopandas.GeoDataFrame,
+                                      column: str
+                                      # column_max: float
+                                      ):
         sns.kdeplot(x=gdf.geometry.x,  # ah ptn le nom de la colonne
                     y=gdf.geometry.y,
                     weights=gdf[column],
@@ -73,6 +78,27 @@ class GeoFigure:
                            ax=self.ax,
                            zorder=2
                            )'''
+
+    # NB : should explain seaborn choice because numpy exists too. uh.
+    # apparently its good for working with pandas dataframes ! wow im so good at architecture eh
+    # totally just wasnt the first thing that popped up on stackoverflow (but i mean, justifiably then eh)
+    def createHistogramPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
+        x = gdf.geometry.x
+        y = gdf.geometry.y
+        weights = gdf[column]
+
+        # Manually compute the bins based on your data
+        x_min, x_max = x.min(), x.max()
+        y_min, y_max = y.min(), y.max()
+        x_bins = np.linspace(x_min, x_max, num=HISTOGRAM_XBINS)  # Adjust the number of bins as needed
+        y_bins = np.linspace(y_min, y_max, num=HISTOGRAM_YBINS)
+
+        # Plot the 2D histogram using sns.histplot
+        sns.histplot(x=x, y=y, weights=weights, bins=[x_bins, y_bins], cmap=COLORMAP, cbar=True,
+                     cbar_kws={'shrink': COLORBAR_SHRINK}, zorder=HISTOGRAM_ZORDER, alpha=HISTOGRAM_ALPHA)
+
+        # nb : Automated estimation of the number of bins is not supported for weighted data with sns.histplot
+        # but if, like Paul says, I want to explore manual bin setting, then consider using sns.histplot directly?
 
     def createHeatMapFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
         # TODO: very probably adapt for multiple columns if I don't do CO2eq

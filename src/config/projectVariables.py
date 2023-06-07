@@ -19,3 +19,5 @@ output_CRS = CRS.from_epsg(EPSG_PSEUDO_MERCATOR)
 
 # Enable/disable code's tracking of emissions by codecarbon
 codecarbon_enabled = False
+
+plot_type = "Histogram"  # or "KDE"
