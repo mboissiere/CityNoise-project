@@ -41,6 +41,9 @@ SCATTER_EDGECOLOR = "black"
 # Choice of the markers' edge size in a scatter plot
 SCATTER_LINEWIDTH = 0.5
 
+# Order of the scatter plot in the z-plane : the higher the number, the closer to the front
+SCATTER_ZORDER = 3
+
 # Car icon, if one wants to make a scatter plot with car markers
 CAR_ICON_PATH = "../view/car_16px.png"
 
@@ -53,11 +56,17 @@ BASEMAP_ALPHA = 1
 # Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
 BASEMAP_ZOOM = 14
 
+# Order of the basemap in the z-plane : the higher the number, the closer to the front
+BASEMAP_ZORDER = 1
+
 # The colormap most appropriate for visualization
 COLORMAP = "YlOrRd"
 
 # The value for transparency of the heatmap, between 0 and 1.
-HEATMAP_ALPHA = 0.8
+KDE_ALPHA = 0.5
+
+# Order of the KDE plot in the z-plane : the higher the number, the closer to the front
+KDE_ZORDER = 3
 
 # How much the colorbar should be shrinked, for purely visualization purposes.
 COLORBAR_SHRINK = 0.5

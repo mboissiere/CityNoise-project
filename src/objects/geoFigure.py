@@ -24,7 +24,7 @@ class GeoFigure:
                            markersize=SCATTER_MARKERSIZE,
                            edgecolor=SCATTER_EDGECOLOR,
                            linewidth=SCATTER_LINEWIDTH,
-                           zorder=3
+                           zorder=SCATTER_ZORDER
                            )
 
     '''PONCER:
@@ -36,15 +36,22 @@ class GeoFigure:
     bins : façon de subdiviser sur les côtés les points de l'histogramme
     - mesh grid avec les routes de sodermalm ?'''
 
-    def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str):
+    def createKDEPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str, column_max: float):
         sns.kdeplot(x=gdf.geometry.x,  # ah ptn le nom de la colonne
                     y=gdf.geometry.y,
                     weights=gdf[column],
                     cmap=COLORMAP,
-                    ax=self.ax
-                    # shade=True,
-                    # shade_lowest=False,
-                    # cbar=True
+                    ax=self.ax,
+                    # zorder=KDE_ZORDER
+                    shade=True,
+                    alpha=KDE_ALPHA,
+                    shade_lowest=False,
+                    cbar=True,
+                    # cbar_ax=self.ax, nope, wonky, but would be nice to exert some more control
+                    bw_method="silverman",
+                    # vmin=0,  # doesn't seem to work, create a colorbar seperately?
+                    # vmax=column_max
+                    cbar_kws={'shrink': COLORBAR_SHRINK}
                     )
 
         # NB:  might work, but might just be extremely long..
@@ -102,5 +109,5 @@ class GeoFigure:
                         source=BASEMAP_SOURCE,
                         alpha=BASEMAP_ALPHA,
                         zoom=BASEMAP_ZOOM,
-                        zorder=1
+                        zorder=BASEMAP_ZORDER
                         )

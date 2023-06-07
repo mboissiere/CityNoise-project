@@ -1,6 +1,9 @@
 import geopandas as gpd
 import pandas as pd
 from pyproj import CRS
+# imports below are for the kde function, might need refactoring
+import numpy as np
+import seaborn as sns
 
 from src.utils.constants.manipulateDataConstants import *
 
@@ -120,7 +123,34 @@ def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
     return accumulation_gdf
 
 
-def simulatedTimeFromGeoDataFrame(gdf: gpd.GeoDataFrame):
+def getEndValuesFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
+    geographical_sum = gdf.groupby([LONGITUDE_COLUMN, LATITUDE_COLUMN])[column].sum()
+    return geographical_sum
+
+
+def getPointMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
+    geographical_sum = getEndValuesFromGeoDataFrame(gdf, column)
+    return geographical_sum.max()
+
+
+# might need some refactoring, there's starting to be a lot of functions...
+def getKDEMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
+    end_gdf = getEndValuesFromGeoDataFrame(gdf, column)
+    kde = sns.kdeplot(x=end_gdf.geometry.x,  # ah ptn le nom de la colonne
+                      y=end_gdf.geometry.y,
+                      weights=end_gdf[column],
+                      common_norm=False,
+                      bw_method="silverman"
+                      # vmin=0,  # doesn't seem to work, create a colorbar seperately?
+                      # vmax=column_max
+                      # cbar_kws={'shrink': COLORBAR_SHRINK}
+                      )
+    density_estimates = kde.get_array()
+    max_density = np.max(density_estimates)
+    return max_density
+
+
+def getSimulatedTimeFromGeoDataFrame(gdf: gpd.GeoDataFrame):
     min_timestep = gdf[TIMESTEP_COLUMN].min()
     max_timestep = gdf[TIMESTEP_COLUMN].max()
     return max_timestep - min_timestep

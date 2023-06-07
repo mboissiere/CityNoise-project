@@ -39,10 +39,13 @@ print(f"Initialized accumulation dataframes for columns : {input_columns}")
 fig = GeoFigure()
 print("Initializing figure and axes...")
 
+CO2_max = getPointMaximumFromGeoDataFrame(gdf=gdf, column='CO2')
+
 # indexGeoDataFrameWithGeometry(accumulation_gdf)
 # print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
 # print(accumulation_gdf.columns)
 
+print("\nInitialization complete! Beginning simulation loop.")
 for timestep in gdf['timestep'].sort_values().unique():
     start_time = time()
 
@@ -59,7 +62,7 @@ for timestep in gdf['timestep'].sort_values().unique():
     # print(accumulation_gdf)
     # print(accumulation_gdf.columns)
     # print(accumulation_gdf.dtypes)
-    fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
+    fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', CO2_max)  # to generalize
     # print("kdeplot")
     end_time = time()
 
@@ -77,7 +80,7 @@ print("\nSnapshots saved.")
 csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')
 accumulation_gdf.to_csv(csv_filename)
 
-simulated_time_seconds = simulatedTimeFromGeoDataFrame(gdf)
+simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
 print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {location_name}.\n")
 
