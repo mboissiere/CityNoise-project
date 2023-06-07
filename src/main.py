@@ -86,19 +86,29 @@ simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
 print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {location_name}.\n")
 
+# Still doesn't work; currently
 video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
 assembleVideo(simulation_folder_path, video_name)
 print(f"\nGenerated video under filename: {video_name}")
 
 print("\n Generating a KDE plot of the end state...")
 new_fig = GeoFigure()
-new_fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
-new_fig.addBasemapFromGeoDataFrame(accumulation_gdf)
 new_fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
+new_fig.addBasemapFromGeoDataFrame(accumulation_gdf)
 # probably a better way of doing this..
 plt.savefig(fname=f"{simulation_folder_path}/KDE.png", dpi=DPI, bbox_inches=BBOX_SETTINGS)  # TO BE CHANGED!!
 
 print(f"End state KDE snapshot saved.")
+# maybe the next step would be : have a fade out time of the gas.
+# perhaps implement a "fade out array" that will make substractions
+# something like after 5 timesteps or so (finite differences)?
+
+# be wary of the profile of gas dispersion/fade. can be meteorological dependant,
+# depends on direction, and maybe buildings come into play.. etc
+
+# apparently there's a really recent (so technical) air pollution model!
+# SIRANE
+
 
 # To comment
 csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')
