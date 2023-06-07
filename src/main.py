@@ -78,14 +78,9 @@ for timestep in gdf['timestep'].sort_values().unique():
 
 print(f"\n{plot_type} snapshots saved.")
 
-fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')
-file_size_bytes = saveSnapshot(simulation_folder_path, timestep)
-file_size, file_size_unit = convertFileSize(file_size_bytes)
-print(f"\nEnd state KDE snapshot saved ({file_size:.2f} {file_size_unit})")
-
-# To comment
-csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')
-accumulation_gdf.to_csv(csv_filename)
+# todo: fix saveSnapshot i want to save it in global folder and not snapshots.
+# also, histogram data should be wiped. perhaps just restart all and plot end state. ("wipe plot" method?)
+plt.close()
 
 simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
@@ -94,6 +89,20 @@ print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {l
 video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
 assembleVideo(simulation_folder_path, video_name)
 print(f"\nGenerated video under filename: {video_name}")
+
+print("\n Generating a KDE plot of the end state...")
+new_fig = GeoFigure()
+new_fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
+new_fig.addBasemapFromGeoDataFrame(accumulation_gdf)
+new_fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
+# probably a better way of doing this..
+plt.savefig(fname=f"{simulation_folder_path}/KDE.png", dpi=DPI, bbox_inches=BBOX_SETTINGS)  # TO BE CHANGED!!
+
+print(f"End state KDE snapshot saved.")
+
+# To comment
+csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')
+accumulation_gdf.to_csv(csv_filename)
 
 if codecarbon_enabled:
     codeEmissions: float = tracker.stop()

@@ -90,8 +90,13 @@ class GeoFigure:
         # Manually compute the bins based on your data
         x_min, x_max = x.min(), x.max()
         y_min, y_max = y.min(), y.max()
-        x_bins = np.linspace(x_min, x_max, num=HISTOGRAM_XBINS)  # Adjust the number of bins as needed
-        y_bins = np.linspace(y_min, y_max, num=HISTOGRAM_YBINS)
+        length = x_max - x_min
+        height = y_max - y_min
+        length_over_height_ratio = length // height
+        x_bins = int(length_over_height_ratio * HISTOGRAM_YBINS)
+        y_bins = HISTOGRAM_YBINS
+        # x_bins = np.linspace(x_min, x_max, num=HISTOGRAM_XBINS)  # Adjust the number of bins as needed
+        # y_bins = np.linspace(y_min, y_max, num=HISTOGRAM_YBINS)
 
         # Plot the 2D histogram using sns.histplot
         sns.histplot(x=x, y=y, weights=weights, bins=[x_bins, y_bins], cmap=COLORMAP, cbar=True,

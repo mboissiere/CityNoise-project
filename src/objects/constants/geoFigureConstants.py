@@ -72,12 +72,15 @@ KDE_ZORDER = 2
 HISTOGRAM_ZORDER = 2
 
 # Number of bins in the x space for histogram (YEAH OK THIS ISNT CLEAR/USEFUL COMPARED TO THE VARIABLE ILL CHANGE MY MIND LATER)
-HISTOGRAM_XBINS = 200
+HISTOGRAM_XBINS = 120
 
 # TODO: make a custom "auto" setting that just uses figure size to determine something ok
 
 # same for y bro
-HISTOGRAM_YBINS = 100
+# ok but honestly this should be a project variable its so important and probably could be changed
+HISTOGRAM_YBINS = 50
+
+HISTOGRAM_NBINS = 100
 
 HISTOGRAM_ALPHA = 0.75
 
