@@ -33,3 +33,6 @@ LATITUDE_COLUMN = "latitude"
 # Further code solidification could check that it is a correct Latitude instead of a float, but non-urgent for now.
 LATITUDE_TYPE = float
 # (Does it show that I had an object-oriented programming internship that was strict with signatures? lmao)
+
+# Name of the CSV column that holds geometry data.
+GEOMETRY_COLUMN = "geometry"
