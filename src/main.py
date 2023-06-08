@@ -39,7 +39,7 @@ converted_max, unit = convertEmissions(gdf, 'CO2', CO2_max)
 accumulation_gdf = initializeAccumulationGeoDataFrame(gdf, input_columns, output_CRS)
 print(f"Initialized accumulation dataframes for columns : {input_columns}")
 
-fig = GeoFigure()
+geofig = GeoFigure()
 print("Initializing figure and axes...")
 
 # indexGeoDataFrameWithGeometry(accumulation_gdf)
@@ -56,15 +56,15 @@ for timestep in gdf['timestep'].sort_values().unique():
                                              columns_of_interest=input_columns
                                              )'''
     timestep_gdf = gdf[gdf[TIMESTEP_COLUMN] == timestep]
-    fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
-    fig.addBasemapFromGeoDataFrame(gdf)
-    fig.adjustAxesFromGeoDataFrame(gdf)
+    geofig.createScatterPlotFromGeoDataFrame(timestep_gdf)
+    geofig.addBasemapFromGeoDataFrame(gdf)
+    geofig.adjustAxesFromGeoDataFrame(gdf)
     accumulation_gdf = addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
 
     if plot_type == "KDE":
-        fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
+        geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
     elif plot_type == "Histogram":
-        fig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', converted_max, unit)
+        geofig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', converted_max, unit)
     end_time = time()
 
     elapsed_time = end_time - start_time
@@ -80,7 +80,6 @@ print(f"\n{plot_type} snapshots saved.")
 
 # todo: fix saveSnapshot i want to save it in global folder and not snapshots.
 # also, histogram data should be wiped. perhaps just restart all and plot end state. ("wipe plot" method?)
-plt.close()
 
 simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
@@ -92,9 +91,12 @@ assembleVideo(simulation_folder_path, video_name)
 print(f"\nGenerated video under filename: {video_name}")
 
 print("\n Generating a KDE plot of the end state...")
-new_fig = GeoFigure()
-new_fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
-new_fig.addBasemapFromGeoDataFrame(accumulation_gdf)
+# NB : so far, there is still the histogram underneath, idk what's up with that
+# also, the wrong colorbar is present.
+geofig.addBasemapFromGeoDataFrame(gdf)
+geofig.adjustAxesFromGeoDataFrame(gdf)
+geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
+
 # probably a better way of doing this..
 plt.savefig(fname=f"{simulation_folder_path}/KDE.png", dpi=DPI, bbox_inches=BBOX_SETTINGS)  # TO BE CHANGED!!
 

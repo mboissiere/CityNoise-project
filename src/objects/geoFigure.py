@@ -19,6 +19,9 @@ class GeoFigure:
         self.ax.set_ylim(min_lat, max_lat)
         if not SHOW_AXES:
             self.ax.set_axis_off()
+        self.ax.set_title("Air pollution simulation in Södermalm")  # to change
+        self.ax.set_xlabel("Longitude")
+        self.ax.set_ylabel("Latitude")
 
     '''def addColorbar(self, colorbar_min, colorbar_max):
         cmap = plt.get_cmap(COLORMAP)
@@ -133,7 +136,9 @@ class GeoFigure:
                                weights=weights,
                                bins=[x_bins, y_bins],
                                cmap=COLORMAP, cbar=True,
-                               cbar_kws={'shrink': COLORBAR_SHRINK, 'label': f"CO2 Pollution ({max_unit})"},
+                               cbar_kws={'label': f"CO2 Pollution ({max_unit})"  # ,
+                                         # 'shrink': COLORBAR_SHRINK,
+                                         },
                                vmin=0, vmax=column_max,
                                zorder=HISTOGRAM_ZORDER, alpha=HISTOGRAM_ALPHA)
         '''cbar = plt.colorbar(ax.collections[0], ax=ax)

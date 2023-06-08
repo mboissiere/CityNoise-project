@@ -23,7 +23,7 @@ SUBPLOT_NUMBER_COLUMNS = 1
 SUBPLOT_INDEX = 1
 
 # Indicates whether or not axes should be displayed.
-SHOW_AXES = False
+SHOW_AXES = True
 
 # Resizing of axes - "auto" by default, can be set to 'equal' if a square aspect ratio is desired.
 AXES_ASPECT_MODE = "auto"
@@ -74,13 +74,13 @@ KDE_ZORDER = 2
 HISTOGRAM_ZORDER = 2
 
 # Number of bins in the x space for histogram (YEAH OK THIS ISNT CLEAR/USEFUL COMPARED TO THE VARIABLE ILL CHANGE MY MIND LATER)
-HISTOGRAM_XBINS = 50
+HISTOGRAM_XBINS = 100
 
 # TODO: make a custom "auto" setting that just uses figure size to determine something ok
 
 # same for y bro
 # ok but honestly this should be a project variable its so important and probably could be changed
-HISTOGRAM_YBINS = 50
+HISTOGRAM_YBINS = 100
 
 HISTOGRAM_NBINS = 100
 
