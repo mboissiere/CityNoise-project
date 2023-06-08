@@ -12,8 +12,15 @@ SNAPSHOT_FOLDER_NAME = "snapshots"
 # Image file format is jpg by default. Can be png, but be aware file sizes can get quite large for not much benefit.
 IMAGE_FILE_FORMAT = "png"
 
+# todo: feature idea, make pre-made "profiles" in project variables.
+# "pretty" would automatically have high DPI and basemap zoom, "fast" would do the opposite for fast runs.
+# fast mode could also include the removal of codecarbon calculations
+
+# and maybe a test mode could print a CSV where 1 column is added at each timestep,
+# and calculations are made to see if it works properly? or just test functions ?
+
 # Image resolution
-DPI = 300
+DPI = 450
 
 # Argument to be parsed in plt.savefig - wraps size of bounding box around image
 BBOX_SETTINGS = "tight"

@@ -6,6 +6,7 @@ import numpy as np
 import seaborn as sns
 
 from src.utils.constants.manipulateDataConstants import *
+from src.objects.constants.geoFigureConstants import *
 
 
 # TODO: Implement an import from .shp file if needed, it's part of Sacha's code.
@@ -124,7 +125,8 @@ def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
 
 
 def getEndValuesFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
-    geographical_sum = gdf.groupby([LONGITUDE_COLUMN, LATITUDE_COLUMN])[column].sum()
+    # TODO: be wary of rtype in commenting! this just returned a pandas series before changing.
+    geographical_sum = gdf.groupby([LONGITUDE_COLUMN, LATITUDE_COLUMN])[column].sum().to_frame().reset_index()
     return geographical_sum
 
 
@@ -136,8 +138,8 @@ def getPointMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
 # might need some refactoring, there's starting to be a lot of functions...
 def getKDEMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
     end_gdf = getEndValuesFromGeoDataFrame(gdf, column)
-    kde = sns.kdeplot(x=end_gdf.geometry.x,  # ah ptn le nom de la colonne
-                      y=end_gdf.geometry.y,
+    kde = sns.kdeplot(x=end_gdf[LONGITUDE_COLUMN],
+                      y=end_gdf[LATITUDE_COLUMN],
                       weights=end_gdf[column],
                       common_norm=False,
                       bw_method="silverman"
@@ -147,6 +149,18 @@ def getKDEMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
                       )
     density_estimates = kde.get_array()
     max_density = np.max(density_estimates)
+    return max_density
+
+
+# these should be its own function
+def getHistogramMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
+    end_gdf = getEndValuesFromGeoDataFrame(gdf, column)
+    hist, _, _ = np.histogram2d(x=end_gdf[LONGITUDE_COLUMN],
+                                y=end_gdf[LATITUDE_COLUMN],
+                                weights=end_gdf[column],
+                                bins=[HISTOGRAM_XBINS, HISTOGRAM_YBINS]
+                                )
+    max_density = np.max(hist)
     return max_density
 
 

@@ -33,13 +33,14 @@ print(f"Data obtained in CRS: {input_CRS.name}")
 gdf.to_crs(output_CRS)
 print(f"Re-projecting to: {output_CRS.name}")
 
+CO2_max = getHistogramMaximumFromGeoDataFrame(gdf=gdf, column='CO2')
+converted_max, unit = convertEmissions(gdf, 'CO2', CO2_max)
+
 accumulation_gdf = initializeAccumulationGeoDataFrame(gdf, input_columns, output_CRS)
 print(f"Initialized accumulation dataframes for columns : {input_columns}")
 
 fig = GeoFigure()
 print("Initializing figure and axes...")
-
-CO2_max = getPointMaximumFromGeoDataFrame(gdf=gdf, column='CO2')
 
 # indexGeoDataFrameWithGeometry(accumulation_gdf)
 # print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
@@ -56,15 +57,14 @@ for timestep in gdf['timestep'].sort_values().unique():
                                              )'''
     timestep_gdf = gdf[gdf[TIMESTEP_COLUMN] == timestep]
     fig.createScatterPlotFromGeoDataFrame(timestep_gdf)
-    fig.addBasemapFromGeoDataFrame(timestep_gdf)
+    fig.addBasemapFromGeoDataFrame(gdf)
     fig.adjustAxesFromGeoDataFrame(gdf)
     accumulation_gdf = addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
 
     if plot_type == "KDE":
         fig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
     elif plot_type == "Histogram":
-        fig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')
-
+        fig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', converted_max, unit)
     end_time = time()
 
     elapsed_time = end_time - start_time

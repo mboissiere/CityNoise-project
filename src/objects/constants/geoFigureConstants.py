@@ -5,11 +5,13 @@ It is possible to modify them here, but in normal execution shouldn't need to ha
 
 import contextily as ctx
 
+# todo: an idea could be to actually base it on the plot, just like I do with histogram bin size...
+# actually, THIS should be based final gdf extent, and pixel size should be based on it as well...
 # The horizontal figure size of the plot
-FIGURE_SIZE_X = 20
+FIGURE_SIZE_X = 100
 
 # The vertical figure size of the plot
-FIGURE_SIZE_Y = 20
+FIGURE_SIZE_Y = 100
 
 # If there are several subplots, the number of rows in the grid that contains them. Should be just the one here.
 SUBPLOT_NUMBER_ROWS = 1
@@ -24,7 +26,7 @@ SUBPLOT_INDEX = 1
 SHOW_AXES = False
 
 # Resizing of axes - "auto" by default, can be set to 'equal' if a square aspect ratio is desired.
-AXES_ASPECT_MODE = "equal"
+AXES_ASPECT_MODE = "auto"
 
 # Size of the points or markers in a scatter plot, if it is chosen constant
 SCATTER_MARKERSIZE = 2
@@ -54,7 +56,7 @@ BASEMAP_SOURCE = ctx.providers.OpenStreetMap.Mapnik
 BASEMAP_ALPHA = 1
 
 # Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
-BASEMAP_ZOOM = 14
+BASEMAP_ZOOM = 16
 
 # Order of the basemap in the z-plane : the higher the number, the closer to the front
 BASEMAP_ZORDER = 1
@@ -72,7 +74,7 @@ KDE_ZORDER = 2
 HISTOGRAM_ZORDER = 2
 
 # Number of bins in the x space for histogram (YEAH OK THIS ISNT CLEAR/USEFUL COMPARED TO THE VARIABLE ILL CHANGE MY MIND LATER)
-HISTOGRAM_XBINS = 120
+HISTOGRAM_XBINS = 50
 
 # TODO: make a custom "auto" setting that just uses figure size to determine something ok
 
