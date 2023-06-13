@@ -73,7 +73,7 @@ class GeoFigure:
                     shade_lowest=False,
                     # cbar=True,
                     # cbar_ax=self.ax, nope, wonky, but would be nice to exert some more control
-                    bw_method="silverman",
+                    bw_method="silverman"
                     # vmin=0,  # doesn't seem to work, create a colorbar seperately?
                     # vmax=column_max
                     # cbar_kws={'shrink': COLORBAR_SHRINK}
@@ -182,8 +182,30 @@ class GeoFigure:
         ctx.add_basemap(self.ax,
                         crs=gdf.crs,
                         # extent=basemap_extent,
+                        reset_extent=False,
                         source=BASEMAP_SOURCE,
                         alpha=BASEMAP_ALPHA,
                         zoom=BASEMAP_ZOOM,
                         zorder=BASEMAP_ZORDER
                         )
+
+
+# Consider mastering pyplot's arguments (Pierre's book?) instead of relying on seaborn
+# which facilitates some work but also locks me (e.g. annoying to set basemap extent, to do histogram interpolation)
+
+
+'''Consider doing interpolation for a continuous view of the 2D histogram:
+
+# Create the seaborn histogram plot
+sns.histplot(data)
+
+# Get the current figure and axis from the plot
+fig = plt.gcf()
+ax = plt.gca()
+
+# Clear the plot
+ax.clear()
+
+# Apply interpolation using imshow and set the desired interpolation method
+im = ax.imshow(data, cmap='hot', interpolation='bilinear')
+'''

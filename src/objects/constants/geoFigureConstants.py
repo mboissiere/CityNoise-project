@@ -57,6 +57,11 @@ BASEMAP_ALPHA = 1
 
 # Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
 BASEMAP_ZOOM = 16
+# 16 is pretty mode, I think 17 is impossible. Perhaps 14 or 15 would be balanced mode, and 12 fast mode.
+# There is a big difference between 14 and 15 imo, perhaps 17, 15 and 13? Yea thats good
+# There is no level of zooming where text is readable, sadly.
+# Perhaps add a certain feature: time estimator, in minutes/hours
+# from an interpolation of the first 5 generations and total number of snapshots
 
 # Order of the basemap in the z-plane : the higher the number, the closer to the front
 BASEMAP_ZORDER = 1

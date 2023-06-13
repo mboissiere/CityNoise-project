@@ -85,17 +85,20 @@ simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
 print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {location_name}.\n")
 
-# Still doesn't work; currently
-video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
-assembleVideo(simulation_folder_path, video_name)
-print(f"\nGenerated video under filename: {video_name}")
-
 print("\n Generating a KDE plot of the end state...")
+plt.clf()
+plt.cla()
 # NB : so far, there is still the histogram underneath, idk what's up with that
 # also, the wrong colorbar is present.
 geofig.addBasemapFromGeoDataFrame(gdf)
 geofig.adjustAxesFromGeoDataFrame(gdf)
 geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
+# Note : geoplot is actually not taht much of a lifesaver, doesn't have 2D histograms... (Consider contributing?)
+
+# Still doesn't work; currently
+video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
+assembleVideo(simulation_folder_path, video_name)
+print(f"\nGenerated video under filename: {video_name}")
 
 # probably a better way of doing this..
 plt.savefig(fname=f"{simulation_folder_path}/KDE.png", dpi=DPI, bbox_inches=BBOX_SETTINGS)  # TO BE CHANGED!!
@@ -104,6 +107,7 @@ print(f"End state KDE snapshot saved.")
 # maybe the next step would be : have a fade out time of the gas.
 # perhaps implement a "fade out array" that will make substractions
 # something like after 5 timesteps or so (finite differences)?
+
 
 # be wary of the profile of gas dispersion/fade. can be meteorological dependant,
 # depends on direction, and maybe buildings come into play.. etc
@@ -119,3 +123,13 @@ accumulation_gdf.to_csv(csv_filename)
 if codecarbon_enabled:
     codeEmissions: float = tracker.stop()
     print(f"CO2eq emissions induced by code: {codeEmissions} kg")
+
+# for modelling dispersion, perhaps something very simple (like, it disappears after 5 iterations) could be done
+# so that i have something.
+# but so far, trying to do "just something" has strayed me away from having any real model that is linked to reality.
+# consider making changes (for example, in how we actually compute instantaneous emissions in the CSV)
+# that are at the level of the model and not just the code.
+
+# also, consider starting the README, and explaining some healthy code habits that i use and hope to maintain.
+# according to paul, there is a huge statement by Google on what they personally do. there's also "clean code" the book.
+# the conventions i try to follow for commits. etc.
