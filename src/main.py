@@ -133,3 +133,6 @@ if codecarbon_enabled:
 # also, consider starting the README, and explaining some healthy code habits that i use and hope to maintain.
 # according to paul, there is a huge statement by Google on what they personally do. there's also "clean code" the book.
 # the conventions i try to follow for commits. etc.
+
+# perhaps seperate stuff by : conditional variables (pretty mode and fast mode), as well as pre-treatment and
+# post-treatment. take care to archive what is done, like TiTAN did with the CSV copy.
