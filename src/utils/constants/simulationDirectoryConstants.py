@@ -20,7 +20,7 @@ IMAGE_FILE_FORMAT = "png"
 # and calculations are made to see if it works properly? or just test functions ?
 
 # Image resolution
-DPI = 450
+DPI = 300
 
 # Argument to be parsed in plt.savefig - wraps size of bounding box around image
 BBOX_SETTINGS = "tight"
