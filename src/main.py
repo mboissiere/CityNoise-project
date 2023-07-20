@@ -42,19 +42,11 @@ print(f"Initialized accumulation dataframes for columns : {input_columns}")
 geofig = GeoFigure()
 print("Initializing figure and axes...")
 
-# indexGeoDataFrameWithGeometry(accumulation_gdf)
-# print("Re-indexing accumulation geo-dataframe using longitude and latitude...")
-# print(accumulation_gdf.columns)
-
 print("\nInitialization complete! Beginning simulation loop.")
 for timestep in gdf['timestep'].sort_values().unique():
     # todo: measure global time as well as individual. also, count saving of snapshot
     start_time = time()
 
-    '''timestep_gdf = obtainGeoDataFromTimeStep(gdf=gdf,
-                                             timestep=timestep,
-                                             columns_of_interest=input_columns
-                                             )'''
     timestep_gdf = gdf[gdf[TIMESTEP_COLUMN] == timestep]
     geofig.createScatterPlotFromGeoDataFrame(timestep_gdf)
     geofig.addBasemapFromGeoDataFrame(gdf)
@@ -62,7 +54,7 @@ for timestep in gdf['timestep'].sort_values().unique():
     accumulation_gdf = addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
 
     if plot_type == "KDE":
-        geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')  # to generalize
+        geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')
     elif plot_type == "Histogram":
         geofig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', converted_max, unit)
     end_time = time()
@@ -78,45 +70,29 @@ for timestep in gdf['timestep'].sort_values().unique():
 
 print(f"\n{plot_type} snapshots saved.")
 
-# todo: fix saveSnapshot i want to save it in global folder and not snapshots.
-# also, histogram data should be wiped. perhaps just restart all and plot end state. ("wipe plot" method?)
 
 simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
 print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {location_name}.\n")
 
+### NB : not sure if the following section works
+# todo: histogram data isn't wiped before generating KDE, and the wrong colorbar is present.
 print("\n Generating a KDE plot of the end state...")
 plt.clf()
 plt.cla()
-# NB : so far, there is still the histogram underneath, idk what's up with that
-# also, the wrong colorbar is present.
 geofig.addBasemapFromGeoDataFrame(gdf)
 geofig.adjustAxesFromGeoDataFrame(gdf)
 geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
-# Note : geoplot is actually not taht much of a lifesaver, doesn't have 2D histograms... (Consider contributing?)
+###
 
-# Still doesn't work; currently
 video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
 assembleVideo(simulation_folder_path, video_name)
 print(f"\nGenerated video under filename: {video_name}")
 
-# probably a better way of doing this..
-plt.savefig(fname=f"{simulation_folder_path}/KDE.png", dpi=DPI, bbox_inches=BBOX_SETTINGS)  # TO BE CHANGED!!
-
+plt.savefig(fname=f"{simulation_folder_path}/KDE.png", dpi=DPI, bbox_inches=BBOX_SETTINGS)
 print(f"End state KDE snapshot saved.")
-# maybe the next step would be : have a fade out time of the gas.
-# perhaps implement a "fade out array" that will make substractions
-# something like after 5 timesteps or so (finite differences)?
 
-
-# be wary of the profile of gas dispersion/fade. can be meteorological dependant,
-# depends on direction, and maybe buildings come into play.. etc
-
-# apparently there's a really recent (so technical) air pollution model!
-# SIRANE
-
-
-# To comment
+### This just saves an additional CSV with accumulated CO2, use is mostly for debugging / checking things are alright.
 csv_filename = os.path.join(simulation_folder_path, 'accumulated_CO2.csv')
 accumulation_gdf.to_csv(csv_filename)
 
@@ -124,15 +100,4 @@ if codecarbon_enabled:
     codeEmissions: float = tracker.stop()
     print(f"CO2eq emissions induced by code: {codeEmissions} kg")
 
-# for modelling dispersion, perhaps something very simple (like, it disappears after 5 iterations) could be done
-# so that i have something.
-# but so far, trying to do "just something" has strayed me away from having any real model that is linked to reality.
-# consider making changes (for example, in how we actually compute instantaneous emissions in the CSV)
-# that are at the level of the model and not just the code.
 
-# also, consider starting the README, and explaining some healthy code habits that i use and hope to maintain.
-# according to paul, there is a huge statement by Google on what they personally do. there's also "clean code" the book.
-# the conventions i try to follow for commits. etc.
-
-# perhaps seperate stuff by : conditional variables (pretty mode and fast mode), as well as pre-treatment and
-# post-treatment. take care to archive what is done, like TiTAN did with the CSV copy.
