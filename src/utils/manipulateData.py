@@ -1,15 +1,15 @@
 import geopandas as gpd
-import pandas as pd
-from pyproj import CRS
 # imports below are for the kde function, might need refactoring
 import numpy as np
-import seaborn as sns
+import pandas as pd
+from pyproj import CRS
 
-from src.utils.constants.manipulateDataConstants import *
 from src.objects.constants.geoFigureConstants import *
-
+from src.utils.constants.manipulateDataConstants import *
 
 # TODO: Implement an import from .shp file if needed, it's part of Sacha's code.
+'''.shp files are particularly interesting, since Geopandas GDFs (geometry column and all) can be exported into shp
+(or geojson) files that can be opened in QGIS!'''
 
 
 # Read the CSV file into a Pandas dataframe
@@ -90,25 +90,20 @@ def obtainGeoDataFromTimeStep(gdf: gpd.GeoDataFrame, timestep: int, columns_of_i
         gdf[TIMESTEP_COLUMN] == timestep, columns]
     return timestep_gdf
 
-
-"""def indexDataFrameWithLonLat(df: pd.DataFrame):
-    df.reset_index(inplace=True)
-    df.set_index([LONGITUDE_COLUMN, LATITUDE_COLUMN], inplace=True)
-
-
-def indexGeoDataFrameWithGeometry(gdf: gpd.GeoDataFrame):
-    geometry = gdf.geometry
-    gdf.reset_index(inplace=True)
-    gdf.set_index(GEOMETRY_COLUMN, inplace=True)
-    gdf.set_geometry
-    # oh god probably all of my code is catastrophic and i just
-    # still do not append accumulation data properly and also mess up the geometry
-    """
-
-
 def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
                                         timestep_gdf: gpd.GeoDataFrame,
                                         columns_of_interest: list):
+    '''
+    Given a GeoDataFrame meant for accumulating values at each point, on a loop over timesteps,
+    this is the action inside the loop: adds values from timestep_gdf into our accumulation_gdf.
+    NB: This function assumes that
+    NOTE: This function is crucial and should be tested properly.
+
+    :param accumulation_gdf:
+    :param timestep_gdf:
+    :param columns_of_interest:
+    :return:
+    '''
     # assumes sorted
     # NB : in refactoring, make it so it's clear what the columns of interest are : gases set in project variables
     # and never touched again.
@@ -133,24 +128,6 @@ def getEndValuesFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
 def getPointMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
     geographical_sum = getEndValuesFromGeoDataFrame(gdf, column)
     return geographical_sum.max()
-
-
-# might need some refactoring, there's starting to be a lot of functions...
-def getKDEMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
-    end_gdf = getEndValuesFromGeoDataFrame(gdf, column)
-    kde = sns.kdeplot(x=end_gdf[LONGITUDE_COLUMN],
-                      y=end_gdf[LATITUDE_COLUMN],
-                      weights=end_gdf[column],
-                      common_norm=False,
-                      bw_method="silverman"
-                      # vmin=0,  # doesn't seem to work, create a colorbar seperately?
-                      # vmax=column_max
-                      # cbar_kws={'shrink': COLORBAR_SHRINK}
-                      )
-    density_estimates = kde.get_array()
-    max_density = np.max(density_estimates)
-    return max_density
-
 
 # these should be its own function
 def getHistogramMaximumFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):

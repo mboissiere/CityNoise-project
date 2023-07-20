@@ -1,10 +1,9 @@
 codecarbon~=2.2.2
 geopandas~=0.12.2
-pandas~=2.0.1
 numpy~=1.24.3
-seaborn~=0.12.2
+pandas~=2.0.1
 pyproj~=3.5.0
 matplotlib~=3.7.1
 moviepy~=1.0.3
 contextily~=1.3.0
-shapely~=2.0.1
+seaborn~=0.12.2

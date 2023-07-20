@@ -23,16 +23,15 @@ TIMESTEP_TYPE = 'Int64'
 LONGITUDE_COLUMN = "longitude"
 
 # Type of the data in the longitude column.
-# Further code solidification could check that it is a correct Longitude instead of a float, but non-urgent for now.
+# todo: Further code solidification could check it is a correct Longitude instead of a float, but non-urgent for now.
 LONGITUDE_TYPE = float
 
 # Name of the CSV column that holds latitude data.
 LATITUDE_COLUMN = "latitude"
 
 # Type of the data in the latitude column.
-# Further code solidification could check that it is a correct Latitude instead of a float, but non-urgent for now.
+# todo: Further code solidification could check it is a correct Latitude instead of a float, but non-urgent for now.
 LATITUDE_TYPE = float
-# (Does it show that I had an object-oriented programming internship that was strict with signatures? lmao)
 
 # Name of the CSV column that holds geometry data.
 GEOMETRY_COLUMN = "geometry"

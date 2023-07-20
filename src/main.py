@@ -75,16 +75,6 @@ simulated_time_seconds = getSimulatedTimeFromGeoDataFrame(gdf)
 simulated_time, time_unit = convertTime(simulated_time_seconds)
 print(f"Successfully simulated {simulated_time:.2f} {time_unit} of traffic in {location_name}.\n")
 
-### NB : not sure if the following section works
-# todo: histogram data isn't wiped before generating KDE, and the wrong colorbar is present.
-print("\n Generating a KDE plot of the end state...")
-plt.clf()
-plt.cla()
-geofig.addBasemapFromGeoDataFrame(gdf)
-geofig.adjustAxesFromGeoDataFrame(gdf)
-geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, "accumulated_CO2")
-###
-
 video_name = f"{location_name}_{simulated_time:.2f}{time_unit}.{VIDEO_FILE_FORMAT}"
 assembleVideo(simulation_folder_path, video_name)
 print(f"\nGenerated video under filename: {video_name}")

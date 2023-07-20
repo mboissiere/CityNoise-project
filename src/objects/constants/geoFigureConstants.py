@@ -62,12 +62,6 @@ BASEMAP_ZORDER = 1
 # The colormap most appropriate for visualization
 COLORMAP = "YlOrRd"
 
-# The value for transparency of the heatmap, between 0 and 1.
-KDE_ALPHA = 0.5
-
-# Order of the KDE plot in the z-plane : the higher the number, the closer to the front
-KDE_ZORDER = 2
-
 # Order of the 2D histogram in the z-plane : the higher the number, the closer to the front
 HISTOGRAM_ZORDER = 2
 

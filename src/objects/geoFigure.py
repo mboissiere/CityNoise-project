@@ -1,11 +1,8 @@
 import geopandas
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 import seaborn as sns
-import numpy as np
 
 from src.objects.constants.geoFigureConstants import *
-from src.utils.unitConversion import *
 
 
 class GeoFigure:
@@ -39,7 +36,6 @@ class GeoFigure:
         colorbar.set_label('Colorbar Label')'''
 
     def createScatterPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame):
-        # print(f"Scatter gdf: {gdf}") NB : honestly, not optimized...
         self.ax = gdf.plot(color=SCATTER_COLOR,
                            marker=SCATTER_MARKER,
                            markersize=SCATTER_MARKERSIZE,
@@ -48,63 +44,10 @@ class GeoFigure:
                            zorder=SCATTER_ZORDER
                            )
 
-    '''PONCER:
-    - KDE avec fill et vmin/vmax qui marchent bien
-    - 2D histogram pour le truc dynamique qui peut être rapide, quitte à ce que ce soit un project variable
-    de choisir entre les deux modélisations
-    - proposition de newt :d onner le nombre de bins sur histogramme c'est donner la résolution.
-    pour une visualization bien, se poser la question de quelle valeur à donner
-    bins : façon de subdiviser sur les côtés les points de l'histogramme
-    - mesh grid avec les routes de sodermalm ?'''
 
-    def createKDEPlotFromGeoDataFrame(self,
-                                      gdf: geopandas.GeoDataFrame,
-                                      column: str
-                                      # column_max: float
-                                      ):
-        sns.kdeplot(x=gdf.geometry.x,  # ah ptn le nom de la colonne
-                    y=gdf.geometry.y,
-                    weights=gdf[column],
-                    cmap=COLORMAP,
-                    ax=self.ax,
-                    # zorder=KDE_ZORDER
-                    shade=True,
-                    alpha=KDE_ALPHA,
-                    shade_lowest=False,
-                    # cbar=True,
-                    # cbar_ax=self.ax, nope, wonky, but would be nice to exert some more control
-                    bw_method="silverman"
-                    # vmin=0,  # doesn't seem to work, create a colorbar seperately?
-                    # vmax=column_max
-                    # cbar_kws={'shrink': COLORBAR_SHRINK}
-                    )
-
-        # NB:  might work, but might just be extremely long..
-        # KDEmap could be maybe useful but only at the end of the computation, as a bonus after the animation like CSV
-
-        # self.ax = kde_ax
-        # plt.colorbar(kde_ax.collections[0], ax=kde_ax)
-        # print(f"KDE gdf: {gdf}")
-
-        # try seaborn again
-        # KJBHdskjhdsliuvhdsovhfidshi use geoplot maybe
-
-        '''self.ax = gdf.plot(column=column,
-                           # x=gdf.geometry.x,
-                           # y=gdf.geometry.y,
-                           kind="kde",
-                           cmap=COLORMAP,
-                           # legend=True,
-                           ax=self.ax,
-                           zorder=2
-                           )'''
-
-    # NB : should explain seaborn choice because numpy exists too. uh.
-    # apparently its good for working with pandas dataframes ! wow im so good at architecture eh
-    # totally just wasnt the first thing that popped up on stackoverflow (but i mean, justifiably then eh)
-    # todo: next step for modelling would be a mesh that actually makes sense (for example, roundabouts, road segments, etc)
     def createHistogramPlotFromGeoDataFrame(self, gdf: geopandas.GeoDataFrame, column: str, column_max: float,
                                             max_unit: str):
+        # todo: next step for modelling would be a mesh that actually makes sense (eg roundabouts, road segments, etc)
         x = gdf.geometry.x
         y = gdf.geometry.y
         weights = gdf[column]
