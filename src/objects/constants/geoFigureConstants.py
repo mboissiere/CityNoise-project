@@ -5,13 +5,6 @@ It is possible to modify them here, but in normal execution shouldn't need to ha
 
 import contextily as ctx
 
-# todo: an idea could be to actually base it on the plot, just like I do with histogram bin size...
-# actually, THIS should be based final gdf extent, and pixel size should be based on it as well...
-# The horizontal figure size of the plot
-FIGURE_SIZE_X = 100
-
-# The vertical figure size of the plot
-FIGURE_SIZE_Y = 100
 
 # If there are several subplots, the number of rows in the grid that contains them. Should be just the one here.
 SUBPLOT_NUMBER_ROWS = 1
@@ -57,11 +50,11 @@ BASEMAP_ALPHA = 1
 
 # Level of detail of the basemap : 18 is max, below 12 is hard to read, but above 16 is too long to compute
 BASEMAP_ZOOM = 14
-# 16 is pretty mode, I think 17 is impossible. Perhaps 14 or 15 would be balanced mode, and 12 fast mode.
-# There is a big difference between 14 and 15 imo, perhaps 17, 15 and 13? Yea thats good
-# There is no level of zooming where text is readable, sadly.
-# Perhaps add a certain feature: time estimator, in minutes/hours
-# from an interpolation of the first 5 generations and total number of snapshots
+'''
+NOTE ON BASEMAP ZOOM :
+Values go from 1 to 18. Below 12 is actually hard to read, but above 16 is extremely long to compute.
+There is sadly no level of zooming where the text will be readable.
+'''
 
 # Order of the basemap in the z-plane : the higher the number, the closer to the front
 BASEMAP_ZORDER = 1
@@ -78,17 +71,25 @@ KDE_ZORDER = 2
 # Order of the 2D histogram in the z-plane : the higher the number, the closer to the front
 HISTOGRAM_ZORDER = 2
 
-# Number of bins in the x space for histogram (YEAH OK THIS ISNT CLEAR/USEFUL COMPARED TO THE VARIABLE ILL CHANGE MY MIND LATER)
+# The horizontal figure size of the plot
+FIGURE_SIZE_X = 100
+
+# The vertical figure size of the plot
+FIGURE_SIZE_Y = 100
+
+# todo: make a custom "auto" setting that determines figure size from gdf extentram later on) from gdf extent
+
+# Number of bins in the x space for histogram
 HISTOGRAM_XBINS = 100
 
-# TODO: make a custom "auto" setting that just uses figure size to determine something ok
-
-# same for y bro
-# ok but honestly this should be a project variable its so important and probably could be changed
+# Number of bins in the y space for histogram
 HISTOGRAM_YBINS = 100
 
+# (deprecated) Number of bins
 HISTOGRAM_NBINS = 100
+# TODO: make a custom "auto" setting that determines bin/pixel size from figure size
 
+# The value for transparency of the histogram, between 0 and 1.
 HISTOGRAM_ALPHA = 0.75
 
 # How much the colorbar should be shrinked, for purely visualization purposes.
