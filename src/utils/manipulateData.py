@@ -11,8 +11,6 @@ from src.utils.constants.manipulateDataConstants import *
 '''.shp files are particularly interesting, since Geopandas GDFs (geometry column and all) can be exported into shp
 (or geojson) files that can be opened in QGIS!'''
 
-
-# Read the CSV file into a Pandas dataframe
 def importFromCSV(columns: list):
     """
     This function imports data from a CSV file into a Pandas DataFrame, assuming the CSV file has columns with timestep,
@@ -69,16 +67,23 @@ def geoDataFrameFromDataFrame(df: pd.DataFrame, crs: CRS):
 
 
 def initializeAccumulationGeoDataFrame(gdf: gpd.GeoDataFrame, columns_of_interest: list, crs: CRS):
-    # refactor: maybe have a function that adds "accumulated_" tag automatically to list
+    '''
+    This function initialized, from a GeoDataFrame showcasing an evolution of values over time, a new "accumulation"
+    GeoDataFrame that will compute the sum of values up to any certain timestep, efficiently.
+    IMPORTANT: CRS reprojection must have already been done!
+
+    :param gdf:
+    :param columns_of_interest:
+    :param crs:
+    :return:
+    '''
+    # todo: maybe a function could automate adding an "accumulated_" tag automatically to any dataframe of interest
     accumulation_df = initializeAccumulationDataFrame(gdf,
-                                                      columns_of_interest)  # reprojection must have already been done!
+                                                      columns_of_interest)
     accumulation_gdf = geoDataFrameFromDataFrame(accumulation_df, crs)
-    # NB : currently i am destroying and recreating latitudes x and y everytime,
-    # perhaps can refactor by keeping longitude and latitude oclumns that i then parse to seaborn kdeplot
     new_columns = ['geometry']
     accumulated_columns = [f"accumulated_{column}" for column in columns_of_interest]
     new_columns.extend(accumulated_columns)
-    # accumulation_gdf.drop([LONGITUDE_COLUMN, LATITUDE_COLUMN])  its ok bc of geometry column
     accumulation_gdf = accumulation_gdf[new_columns]
     return accumulation_gdf
 
@@ -99,28 +104,20 @@ def addAccumulationDataFromGeoDataFrame(accumulation_gdf: gpd.GeoDataFrame,
     NB: This function assumes that
     NOTE: This function is crucial and should be tested properly.
 
-    :param accumulation_gdf:
-    :param timestep_gdf:
-    :param columns_of_interest:
-    :return:
+    :param accumulation_gdf: the 2D GeoDataFrame accumulating values of a scalar (sum of timesteps thus far)
+    :param timestep_gdf: the 2D GeoDataFrame of current scalar values (current timestep state)
+    :param columns_of_interest: the gases we're studying (set in config/projectVariables)
+    :return: accumulation_gdf, updated to the current timestep
+    :rtype gpd.GeoDataFrame:
     '''
-    # assumes sorted
-    # NB : in refactoring, make it so it's clear what the columns of interest are : gases set in project variables
-    # and never touched again.
-    # NB : this function is funky and crucial and should be tested.
-
-    # this attempt : merges and unmerges
     merged_gdf = accumulation_gdf.merge(timestep_gdf, on='geometry', how='left')
     for column in columns_of_interest:
         merged_gdf[f'accumulated_{column}'] += merged_gdf[column].fillna(0)
-    # print(merged_gdf)
     accumulation_gdf = merged_gdf[accumulation_gdf.columns]
-    # print(accumulation_gdf)
     return accumulation_gdf
 
 
 def getEndValuesFromGeoDataFrame(gdf: gpd.GeoDataFrame, column: str):
-    # TODO: be wary of rtype in commenting! this just returned a pandas series before changing.
     geographical_sum = gdf.groupby([LONGITUDE_COLUMN, LATITUDE_COLUMN])[column].sum().to_frame().reset_index()
     return geographical_sum
 
