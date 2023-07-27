@@ -1,0 +1,11 @@
+VSP_COLUMN = "VSP"
+
+MODE_COLUMN = "mode"
+
+NOx_COLUMN = "NOx"
+
+HC_COLUMN = "HC"
+
+CO2_COLUMN = "CO2"
+
+CO_COLUMN = "CO"
