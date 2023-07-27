@@ -9,7 +9,7 @@ from src.config.projectConstants import *
 location_name = "sodermalm"
 
 # Name of the import of interest.
-data_path = "traffic_data.csv"
+data_path = "fcdgeo_5min.csv"
 
 # Name of the paper presenting the model currently in use.
 model_name = "Coelho2016"

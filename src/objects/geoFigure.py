@@ -35,6 +35,7 @@ class GeoFigure:
                                             max_unit: str):
         # todo: next step for modelling would be a mesh that actually makes sense (eg roundabouts, road segments, etc)
         # TODO: very probably adapt for multiple columns if I don't do CO2eq. but that might mean just, several plots.
+        x = gdf.geometry.x
         y = gdf.geometry.y
         weights = gdf[column]
 

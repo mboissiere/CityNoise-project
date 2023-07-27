@@ -19,14 +19,14 @@ TIMESTEP_COLUMN = "timestep"
 TIMESTEP_TYPE = 'Int64'
 
 # Name of the CSV column that holds longitude data.
-LONGITUDE_COLUMN = "longitude"
+LONGITUDE_COLUMN = "x"
 
 # Type of the data in the longitude column.
 # todo: Further code solidification could check it is a correct Longitude instead of a float, but non-urgent for now.
 LONGITUDE_TYPE = float
 
 # Name of the CSV column that holds latitude data.
-LATITUDE_COLUMN = "latitude"
+LATITUDE_COLUMN = "y"
 
 # Type of the data in the latitude column.
 # todo: Further code solidification could check it is a correct Latitude instead of a float, but non-urgent for now.

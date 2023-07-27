@@ -1,5 +1,3 @@
-from math import sin, atan
-
 from src.models.preprocessingConstants import *
 from src.utils.manipulateData import *
 
@@ -10,58 +8,23 @@ from src.utils.manipulateData import *
 # Formula for VSP from: https://doi.org/10.1016/j.trd.2017.05.016
 # Formula for VSP mode pollutants: https://doi.org/10.1016/j.trd.2006.06.005
 
-def computeVSP(speed, acceleration, slope):
-    '''
-    for a single value
-    :param speed:
-    :param acceleration:
-    :param slope:
-    :return:
-    '''
-    v = speed
-    a = acceleration
-    grade = slope
-
-    vsp = v * (1.1 * a + 9.81 * sin(atan(grade)) + 0.132) + 0.000302 * v**3
-    return vsp
 
 def addVspToDataFrame(df: pd.DataFrame):
-    '''operation on a dataframe'''
-    df[VSP_COLUMN] = computeVSP(df[SPEED_COLUMN], df[ACCELERATION_COLUMN], df[GRADE_COLUMN])
+    v = df[SPEED_COLUMN]
+    a = df[ACCELERATION_COLUMN]
+    grade = df[GRADE_COLUMN]
+    df[VSP_COLUMN] = v * (1.1 * a + 9.81 * np.sin(np.arctan(grade)) + 0.132) + 0.000302 * v**3
     return df
 
 def computeVspMode(vsp: float):
-    if vsp < -2:
-        return 1
-    elif -2 <= vsp and vsp < 0:
-        return 2
-    elif 0 <= vsp and vsp < 1:
-        return 3
-    elif 1 <= vsp and vsp < 4:
-        return 4
-    elif 4 <= vsp and vsp < 7:
-        return 5
-    elif 7 <= vsp and vsp < 10:
-        return 6
-    elif 10 <= vsp and vsp < 13:
-        return 7
-    elif 13 <= vsp and vsp < 16:
-        return 8
-    elif 16 <= vsp and vsp < 19:
-        return 9
-    elif 19 <= vsp and vsp < 23:
-        return 10
-    elif 23 <= vsp and vsp < 28:
-        return 11
-    elif 28 <= vsp and vsp < 33:
-        return 12
-    elif 33 <= vsp and vsp < 39:
-        return 13
-    elif 39 <= vsp:
-        return 14
+    vsp_ranges = [-2, 0, 1, 4, 7, 10, 13, 16, 19, 23, 28, 33, 39]
+    for i, upper_limit in enumerate(vsp_ranges):
+        if vsp < upper_limit:
+            return i + 1
+    return 14
 
 def addVspModeToDataFrame(df: pd.DataFrame):
-    df[MODE_COLUMN] = computeVspMode(df[VSP_COLUMN])
+    df[MODE_COLUMN] = df[VSP_COLUMN].apply(computeVspMode)
     return df
 
 def importModelFromCSV(model: str):
@@ -71,14 +34,14 @@ def importModelFromCSV(model: str):
     :return:
     '''
 
-
-    df = pd.read_csv(f'{model}.csv',
+    MODEL_PATH = os.path.join(PATH_TO_MODELS,f"{model}.csv")
+    df = pd.read_csv(MODEL_PATH,
                      #NB : Path here could be refactored
                      usecols=[MODE_COLUMN,
                               NOx_COLUMN,
                               HC_COLUMN,
                               CO2_COLUMN,
-                              CO_COLUMN])
+                              CO_COLUMN]).dropna()
     return df
 
 def addPollutantsToDataFrame(data_df: pd.DataFrame, model_df: pd.DataFrame):
