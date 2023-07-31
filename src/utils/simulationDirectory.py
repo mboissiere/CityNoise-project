@@ -17,7 +17,7 @@ def createSimulationFolder():
     Creates a folder in which to save screenshots from the simulation.
     Sorts it using date & time of simulation launch, as to not clog up workspace.
 
-    TODO: account for models columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
+    TODO: account for input columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
     More ambitious simulations could try and represent chemical reactions, but for now we can assume gases
     work independantly and thus maybe plot several dynamical figures in several folders.
 
@@ -45,7 +45,7 @@ def saveSnapshot(simulation_folder_path: str, timestep: int):
     """
     Saves the current figure in pyplot as an image.
 
-    TODO: account for models columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
+    TODO: account for input columns with more than one gas of interest (e.g. sodermalm_CO2_timestep)
     :param simulation_folder_path: Path of the simulation folder where snapshots will be saved.
     :param timestep: Timestep currently represented by the snapshot being saved.
     :return: Its file size, in bytes.

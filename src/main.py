@@ -1,7 +1,11 @@
 import logging
 from time import time
 
+<<<<<<< HEAD
 from src.models.preprocessing import *
+=======
+from src.config.projectVariables import *
+>>>>>>> parent of ca33027 (feature: first attempt at pandas preprocessing (shouldve done it immediately tbh)
 from src.objects.geoFigure import *
 from src.utils.codeEmissions import *
 from src.utils.manipulateData import *
@@ -26,18 +30,6 @@ if codecarbon_enabled:
 
 df = importFromCSV(input_columns)
 print(f"Snapshots will be saved in {IMAGE_FILE_FORMAT} format under the name: {location_name}.")
-
-df = addVspToDataFrame(df)
-print("Computing VSP for each vehicle's data point...")
-
-df = addVspModeToDataFrame(df)
-print("Computing VSP mode for each vehicle...")
-
-model = importModelFromCSV(model_name)
-print(f"Importing model from paper: {model_name}")
-
-df = addPollutantsToDataFrame(df, model)
-print(f"Computing pollutant emissions...")
 
 gdf = geoDataFrameFromDataFrame(df, input_CRS)
 print(f"Data obtained in CRS: {input_CRS.name}")
