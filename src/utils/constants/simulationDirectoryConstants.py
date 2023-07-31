@@ -13,7 +13,7 @@ SNAPSHOT_FOLDER_NAME = "snapshots"
 IMAGE_FILE_FORMAT = "png"
 
 # Image resolution
-DPI = 300
+DPI = 150
 
 # Argument to be parsed in plt.savefig - wraps size of bounding box around image
 BBOX_SETTINGS = "tight"

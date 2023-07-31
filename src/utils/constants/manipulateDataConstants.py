@@ -13,7 +13,7 @@ PATH_TO_DATA = os.path.join('..', 'data')
 TRAFFIC_DATA_PATH = os.path.join(PATH_TO_DATA, data_path)
 
 # Name of the CSV column that holds timestep data.
-TIMESTEP_COLUMN = "timestep"
+TIMESTEP_COLUMN = "time"
 
 # Type of the data in the timestep column. It is recommended to use Int64 to avoid errors at long timesteps.
 TIMESTEP_TYPE = 'Int64'

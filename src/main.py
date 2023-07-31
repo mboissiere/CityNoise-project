@@ -1,7 +1,6 @@
 import logging
 from time import time
 
-from src.config.projectVariables import *
 from src.models.preprocessing import *
 from src.objects.geoFigure import *
 from src.utils.codeEmissions import *
@@ -56,7 +55,7 @@ geofig = GeoFigure()
 print("Initializing figure and axes...")
 
 print("\nInitialization complete! Beginning simulation loop.")
-for timestep in gdf['timestep'].sort_values().unique():
+for timestep in gdf[TIMESTEP_COLUMN].sort_values().unique():
     # todo: measure global time as well as individual. also, count saving of snapshot
     start_time = time()
 
