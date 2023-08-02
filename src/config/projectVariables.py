@@ -12,7 +12,7 @@ location_name = "sodermalm"
 data_path = "fcdgeo_2h.csv"
 
 # Name of the paper presenting the model currently in use.
-model_name = "Coelho2016"
+model_name = "Coelho2006"
 
 # Names of columns that will be imported and studied. Timestep, longitude and latitude are already imported by default.
 input_columns = ['CO2']
