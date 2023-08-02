@@ -27,10 +27,16 @@ def importFromCSV(columns: list):
     df = pd.read_csv(TRAFFIC_DATA_PATH,
                      usecols=[TIMESTEP_COLUMN,
                               LONGITUDE_COLUMN,
-                              LATITUDE_COLUMN].append(columns),
+                              LATITUDE_COLUMN,
+                              SPEED_COLUMN,
+                              ACCELERATION_COLUMN,
+                              GRADE_COLUMN].append(columns),
                      dtype={TIMESTEP_COLUMN: TIMESTEP_TYPE,
                             LONGITUDE_COLUMN: LONGITUDE_TYPE,
-                            LATITUDE_COLUMN: LATITUDE_TYPE}).dropna()
+                            LATITUDE_COLUMN: LATITUDE_TYPE,
+                            SPEED_COLUMN: SPEED_TYPE,
+                            ACCELERATION_COLUMN: ACCELERATION_TYPE,
+                            GRADE_COLUMN: GRADE_TYPE}).dropna()
     return df
 
 
