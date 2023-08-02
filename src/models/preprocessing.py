@@ -30,7 +30,7 @@ def addVspModeToDataFrame(df: pd.DataFrame):
 def importModelFromCSV(model: str):
     '''
 
-    :param model: name of the csv with model, eg "Coelho2016" for Coelho2016.csv
+    :param model: name of the csv with model, eg "Coelho2006" for Coelho2006.csv
     :return:
     '''
 
