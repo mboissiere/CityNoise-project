@@ -1,11 +1,7 @@
 import logging
 from time import time
 
-<<<<<<< HEAD
-from src.models.preprocessing import *
-=======
 from src.config.projectVariables import *
->>>>>>> parent of ca33027 (feature: first attempt at pandas preprocessing (shouldve done it immediately tbh)
 from src.objects.geoFigure import *
 from src.utils.codeEmissions import *
 from src.utils.manipulateData import *
