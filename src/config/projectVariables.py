@@ -17,13 +17,13 @@ model_name = "Coelho2006"
 # Names of columns that will be imported and studied. Timestep, longitude and latitude are already imported by default.
 input_columns = ['CO2']
 
-# EPSG identifier of the CRS used in the creation of the input CSV
+# EPSG identifier of the CRS used in the creation of the model's CSV
 input_CRS = CRS.from_epsg(EPSG_WORLD_GEODESIC_SYSTEM)
 
 # EPSG identifier of the output CRS desired in case of reprojection
 output_CRS = CRS.from_epsg(EPSG_PSEUDO_MERCATOR)
 
 # Enable/disable code's tracking of emissions by codecarbon
-codecarbon_enabled = True
+codecarbon_enabled = False
 
 plot_type = "Histogram"  # "Histogram" or "KDE" (NB : KDE is actually deprecated)
