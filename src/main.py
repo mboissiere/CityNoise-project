@@ -64,12 +64,6 @@ for timestep in gdf[TIMESTEP_COLUMN].sort_values().unique():
     geofig.addBasemapFromGeoDataFrame(gdf)
     geofig.adjustAxesFromGeoDataFrame(gdf)
     accumulation_gdf = addAccumulationDataFromGeoDataFrame(accumulation_gdf, timestep_gdf, input_columns)
-
-    # DEPRECATED
-    # if plot_type == "KDE":
-    #     geofig.createKDEPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2')
-    # elif plot_type == "Histogram":
-
     geofig.createHistogramPlotFromGeoDataFrame(accumulation_gdf, 'accumulated_CO2', converted_max, unit)
     end_time = time()
 
