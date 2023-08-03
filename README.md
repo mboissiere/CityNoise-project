@@ -8,11 +8,12 @@ Welcome to the CityNoise Project! This is a GitHub repository containing a progr
 3. [Running the Program](#running-the-program)
 4. [Documentation](#documentation)
 
-## SSH Clone
 
-To clone this project from GitHub, you can use the SSH URL. 
-Make sure you have Git installed on your machine.
-If you do not know how to configure a SSH key, a tutorial is available on GitHub.
+## Clone the project via SSH
+
+To clone this project from GitHub, you can use a SSH key. 
+
+Make sure you have Git installed on your machine.  If you do not know how to configure a SSH key, a tutorial is available on GitHub.
 
 ```bash
 git clone git@github.com:mboissiere/CityNoise-project.git
@@ -22,7 +23,7 @@ git clone git@github.com:mboissiere/CityNoise-project.git
 
 Before using the program, you need to install the required Python dependencies. We use `pip` to manage these dependencies. If you already have pip installed, you can proceed with the following steps. Otherwise, follow the instructions for your operating system below:
 
-#### Install pip (if not installed)
+### Install pip (if not installed)
 
 **On Linux/macOS:**
 
@@ -53,13 +54,14 @@ If pip is not installed, download [get-pip.py](https://bootstrap.pypa.io/get-pip
 python get-pip.py
 ```
 
-#### Install project dependencies
+### Install project dependencies
 
 After you have pip installed, navigate to the project directory and run the following command to install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
+
 
 ## Running the Program
 
