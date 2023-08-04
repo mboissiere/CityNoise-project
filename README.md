@@ -1,4 +1,4 @@
-# CityNoise Project 28095
+# CityNoise project 28095
 
 This is a GitHub repository containing a program to visualize the evolution over time of air pollution levels, with given vehicle traffic and emissions model of choice.
 The program is so far focused on the Södermalm area but could be made to change with time.
