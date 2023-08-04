@@ -17,7 +17,7 @@ To clone this project from GitHub, you can use a SSH key.
 Make sure you have Git installed on your machine.  If you do not know how to configure a SSH key, a tutorial is available on GitHub.
 
 ```bash
-git clone git@github.com:mboissiere/CityNoise-project.git
+git clone git@github.com:mboissiere/CityNoise-project-28095.git
 ```
 
 ## Installing Dependencies
